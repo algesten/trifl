@@ -1,14 +1,14 @@
-{route, navigate, path, layout, view, exec} = trifl
+{route, navigate, path, layout, view} = trifl
 {div, ul, li, img} = tagg
 {iif, eq} = fnuc
 
-route ->
+route (p, q) ->
     appview.top topnav 'home'
     appview.main hero
-    exec onRoute
-    path '/news', ->
+    onRoute p, q
+    path '/news', (p, q) ->
         appview.top topnav 'news'
-        if exec isItem
+        if isItem p, q
             appview.main newsitem
         else
             appview.main newslist
