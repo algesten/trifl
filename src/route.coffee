@@ -3,7 +3,7 @@
 replaceplus = (s) -> s.replace /\+/g, ' '
 decode      = (s) -> decodeURIComponent replaceplus s
 
-# turns a search string ?a=b into an object
+# turns a search string ?a=b into an object {a:'b'}
 query = (s, ret = {}) ->
     unless s # null, undefined, false, ''
         ret
@@ -55,11 +55,10 @@ router = null
 do init = ->
     `router = new Router(window)`
 
-module.exports = {
-    route:router.route, path:router.path, navigate:router.navigate, query
-}
+module.exports = {route:router.route, path:router.path, navigate:router.navigate}
 
-# expose router for tests
+# expose router/reinit for tests
 if global?.__TEST_ROUTER
+    module.exports.query = query
     module.exports.router = router
-    module.exports.reinit = -> init()
+    module.exports.reinit = init
