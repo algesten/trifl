@@ -1,9 +1,4 @@
-
 {startswith, indexof} = require './fun'
-
-#navigate
-#route
-#path
 
 replaceplus = (s) -> s.replace /\+/g, ' '
 decode      = (s) -> decodeURIComponent replaceplus s
@@ -35,25 +30,36 @@ class Router
         saved = @_path
         @_path = (p, f) => @_consume loc, pos + p.length, query, f if startswith(sub, p)
         try fun(sub, query); finally @_path = saved
+        return true
 
     _check: =>
-        return if @loc.pathname == @win.pathname and @loc.search == @win.search
+        return false if @loc.pathname == @win.pathname and @loc.search == @win.search
         @_exec @win.pathname, @win.search
 
-    _exec: (pathname, search) ->
+    _exec: (pathname = '/', search = '') ->
         @loc.pathname = pathname
         @loc.search   = search
         q = query if search[0] == '?' then search.substring(1) else search
         @_consume pathname, 0, q, @_route
+
+    navigate: (url) =>
+        @win.history.pushState {}, '', url
+        @_check()
 
     route: (f)    => @_route = f
     path:  (p, f) => @_path p, f
 
 
 # singleton
-`router = new Router(window)`
-
+router = null
+do init = ->
+    `router = new Router(window)`
 
 module.exports = {
-    Router, route:router.route, path:router.path, query
+    route:router.route, path:router.path, navigate:router.navigate, query
 }
+
+# expose router for tests
+if global?.__TEST_ROUTER
+    module.exports.router = router
+    module.exports.reinit = -> init()
