@@ -1,0 +1,27 @@
+{
+  "name": "trifl",
+  "version": "0.0.1",
+  "description": "trifling functional views",
+  "main": "lib/trifl.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algesten/trifl"
+  },
+  "keywords": [
+    "view",
+    "model",
+    "router",
+    "functional",
+    "client",
+    "browser"
+  ],
+  "author": "Martin Algesten <martin@algesten.se>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/algesten/trifl/issues"
+  },
+  "homepage": "https://github.com/algesten/trifl"
+}
