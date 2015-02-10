@@ -1,6 +1,6 @@
 eql = assert.deepEqual
 
-query = router = reinit = route = path = navigate = null
+query = router = reinit = route = path = exec = navigate = null
 
 describe 'route', ->
 
@@ -15,7 +15,7 @@ describe 'route', ->
                 pushState: spy ->
         {query, reinit} = require '../src/route'
         router = reinit?()
-        {route, path, navigate} = router
+        {route, path, exec, navigate} = router
 
     afterEach ->
         delete global.window
@@ -61,7 +61,7 @@ describe 'route', ->
         describe '_check', ->
 
             beforeEach ->
-                router._exec = stub().returns true
+                router._run = stub().returns true
                 router.loc.pathname = '/a/path'
                 router.loc.search   = '?panda=true'
 
@@ -69,34 +69,34 @@ describe 'route', ->
                 router.win.pathname = '/a/path'
                 router.win.search   = '?panda=true'
                 eql router._check(), false
-                eql router._exec.callCount, 0
+                eql router._run.callCount, 0
 
-            it 'compares pathname/search and executes _exec if pathname differs', ->
+            it 'compares pathname/search and executes _run if pathname differs', ->
                 router.win.pathname = '/another/path'
                 router.win.search   = '?panda=true'
                 eql router._check(), true
-                eql router._exec.callCount, 1
-                eql router._exec.args[0], ['/another/path', '?panda=true']
+                eql router._run.callCount, 1
+                eql router._run.args[0], ['/another/path', '?panda=true']
 
-            it 'compares pathname/search and executes _exec if search differs', ->
+            it 'compares pathname/search and executes _run if search differs', ->
                 router.win.pathname = '/a/path'
                 router.win.search   = '?kitten=true'
                 eql router._check(), true
-                eql router._exec.callCount, 1
-                eql router._exec.args[0], ['/a/path', '?kitten=true']
+                eql router._run.callCount, 1
+                eql router._run.args[0], ['/a/path', '?kitten=true']
 
-        describe '_exec', ->
+        describe '_run', ->
 
             beforeEach ->
                 router._consume = spy ->
-                router._exec '/a/path', '?panda=true'
+                router._run '/a/path', '?panda=true'
 
             it 'accepts a null pathname', ->
-                router._exec null, '?panda=true'
+                router._run null, '?panda=true'
                 eql router.loc.pathname, '/'
 
             it 'accepts a null search', ->
-                router._exec '/', null
+                router._run '/', null
                 eql router.loc.search, ''
 
             it 'updates the @loc object', ->
@@ -122,50 +122,91 @@ describe 'route', ->
             navigate '/a/path?foo=bar'
             eql router._check.callCount, 1
 
-    describe 'route/path', ->
+    describe 'route/path/exec', ->
+
+        it 'outside route, nothing', ->
+            path '/', r = spy ->
+            exec e = spy ->
+            eql r.callCount, 0
+            eql e.callCount, 0
 
         it 'executes the route set', ->
+            r = e = null
             route r = spy ->
-            router._exec '/a/path', '?foo=bar'
+                exec e = spy ->
+            router._run '/a/path', '?foo=bar'
             eql r.callCount, 1
-            eql r.args[0], ['/a/path', foo:'bar']
+            eql r.args[0], []
+            eql e.callCount, 1
+            eql e.args[0], ['/a/path', foo:'bar']
+
+        it 'executes to the end and no more', ->
+            r1 = r2 = e = null
+            route spy ->
+                path '/a/path', ->
+                    exec e = spy ->
+                    path '/', r1 = spy ->
+                    path '', r2 = spy ->
+            router._run '/a/path', '?foo=bar'
+            eql r1.callCount, 0
+            eql r2.callCount, 1
+            eql r2.args[0], []
+            eql e.callCount, 1
+            eql e.args[0], ['', foo:'bar']
 
         it 'path without match does nothing', ->
             r = null
             route -> path '/item', r = spy ->
-            router._exec '/a/path', '?foo=bar'
+            router._run '/a/path', '?foo=bar'
             eql r.callCount, 0
 
         it 'path consumes the route further', ->
             r = null
             route -> path '/item', r = spy ->
-            router._exec '/item/here', '?foo=bar'
+            router._run '/item/here', '?foo=bar'
             eql r.callCount, 1
-            eql r.args[0], ['/here', foo:'bar']
+            eql r.args[0], []
 
         it 'path in path consumes the route further', ->
-            r = null
-            route -> path '/item', -> path '/is', r = spy ->
-            router._exec '/item/is/there', '?foo=bar'
+            r = e = null
+            route -> path '/item', ->
+                path '/is', r = spy ->
+                    exec e = spy ->
+            router._run '/item/is/there', '?foo=bar'
             eql r.callCount, 1
-            eql r.args[0], ['/there', foo:'bar']
+            eql r.args[0], []
+            eql e.callCount, 1
+            eql e.args[0], ['/there', foo:'bar']
 
         it 'path on the same level can match again', ->
-            r = null
+            r = e1 = e2 = null
             route ->
                 path '/item', ->
+                    exec e1 = spy ->
                 path '/it', r = spy ->
-            router._exec '/item/here', '?foo=bar'
+                    exec e2 = spy ->
+            router._run '/item/here', '?foo=bar'
             eql r.callCount, 1
-            eql r.args[0], ['em/here', foo:'bar']
+            eql r.args[0], []
+            eql e1.callCount, 1
+            eql e1.args[0], ['/here', foo:'bar']
+            eql e2.callCount, 1
+            eql e2.args[0], ['em/here', foo:'bar']
 
         it 'path on the same level can match again after path in path', ->
-            r1 = r2 = null
+            r1 = r2 = e1 = e2 = null
             route ->
-                path '/item', -> path '/he', r1 = spy ->
+                path '/item', ->
+                    path '/he', r1 = spy ->
+                        exec e1 = spy ->
                 path '/it', r2 = spy ->
-            router._exec '/item/here', '?foo=bar'
+                    exec e2 = spy ->
+            router._run '/item/here', '?foo=bar'
             eql r1.callCount, 1
-            eql r1.args[0], ['re', foo:'bar']
+            eql r1.args[0], []
             eql r2.callCount, 1
-            eql r2.args[0], ['em/here', foo:'bar']
+            eql r2.args[0], []
+            eql e1.callCount, 1
+            eql e1.args[0], ['re', foo:'bar']
+            eql e2.callCount, 1
+            eql e2.args[0], ['em/here', foo:'bar']

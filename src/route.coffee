@@ -20,6 +20,7 @@ class Router
     loc:   null  # saved location for comparison in _check()
     _route: ->   # saved route function
     _path:  null # path function replaced for every _consume
+    _exec:  null # exec function replaced for every _consume
 
     constructor: (@win) ->
         @win.addEventListener 'onpopstate', @_check, false
@@ -27,16 +28,18 @@ class Router
 
     _consume: (loc, pos, query, fun) =>
         sub = loc.substring pos
-        saved = @_path
+        spath = @_path
+        sexec = @_exec
+        @_exec = (f) => f sub, query
         @_path = (p, f) => @_consume loc, pos + p.length, query, f if startswith(sub, p)
-        try fun(sub, query); finally @_path = saved
+        try fun(); finally (@_path = spath; @_exec = sexec)
         return true
 
     _check: =>
         return false if @loc.pathname == @win.pathname and @loc.search == @win.search
-        @_exec @win.pathname, @win.search
+        @_run @win.pathname, @win.search
 
-    _exec: (pathname = '/', search = '') ->
+    _run: (pathname = '/', search = '') ->
         @loc.pathname = pathname
         @loc.search   = search
         q = query if search[0] == '?' then search.substring(1) else search
@@ -47,7 +50,8 @@ class Router
         @_check()
 
     route: (f)    => @_route = f
-    path:  (p, f) => @_path p, f
+    path:  (p, f) => @_path? p, f
+    exec:  (f)    => @_exec? f
 
 
 # singleton
