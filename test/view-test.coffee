@@ -14,3 +14,22 @@ describe 'view', ->
         v = view -> p()
         v()
         eql v.el.tagName, 'P'
+
+describe 'layout', ->
+
+    it 'declares a layout with regions specified as classes', ->
+        l = layout top:'.top', bot:'.bot', ->
+            div ->
+                div class:'top'
+                div class:'bot'
+        eql typeof l.top, 'function'
+        eql typeof l.bot, 'function'
+
+    it 'takes views in regions', ->
+        l = layout top:'.top', ->
+            div class:'outer', ->
+                div class:'top'
+        v = view -> div class:'view'
+        v()
+        l.top v
+        eql l.el.childNodes[0].className, 'top'

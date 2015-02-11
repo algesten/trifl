@@ -1,8 +1,11 @@
-g = (global || window)
+unless global.window
+    jsdom           = require('jsdom').jsdom
+    global.window   = jsdom().defaultView
+    global.document = window.document
 
-chai   = require 'chai'
-g.assert = chai.assert
-chai.use require 'sinon-chai'
-sinon  = require 'sinon'
-g.stub = sinon.stub
-g.spy  = sinon.spy
+    chai   = require 'chai'
+    global.assert = chai.assert
+    chai.use require 'sinon-chai'
+    sinon  = require 'sinon'
+    global.stub = sinon.stub
+    global.spy  = sinon.spy

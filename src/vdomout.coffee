@@ -11,6 +11,9 @@ module.exports = class VDOMOut
     start: ->
 
     begin: (name, vod, props) ->
+        if props.class
+            props.className = props.class
+            delete props.class
         if vod
             throw new Error "Bad void element root: #{name}" unless @stack.length > 1
             @cur.childs.push {name, props}

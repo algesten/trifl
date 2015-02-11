@@ -31,8 +31,8 @@ describe 'VDOMOut', ->
         eqlvt vt, 'div', 0, {}
 
     it 'renders a simple div with class', ->
-        vt = capture out, -> div class:'foo'
-        eqlvt vt, 'div', 0, class:'foo'
+        vt = capture out, -> div className:'foo'
+        eqlvt vt, 'div', 0, className:'foo'
 
     it 'complains if the node is a void element', ->
         assert.throws (-> capture out, -> img()), 'Bad void element root: img'
@@ -44,8 +44,8 @@ describe 'VDOMOut', ->
 
     it 'renders a complex tree', ->
         vt = capture out, tree
-        eqlvt vt, 'div', 3, class:'special'
-        eqlvt vt.children[0], 'div', 1, class:'widget'
+        eqlvt vt, 'div', 3, className:'special'
+        eqlvt vt.children[0], 'div', 1, className:'widget'
         eqlvt vt.children[0].children[0], 'p', 1, {}
         eql vt.children[0].children[0].children[0].text, 'with stuff'
         eqlvt vt.children[1], 'p', 1, {}
