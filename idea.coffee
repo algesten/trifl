@@ -22,9 +22,9 @@ onRoute = (p, q) ->
 isItem = (p, q) ->
     # determine whether p is item
 
-route '/news/thehives-51423'
+#route '/news/thehives-51423'
 
-appview = layout ->
+appview = layout top:'.top', main:'.main', ->
     div class:'appview', ->
         div class:'top'
         div class:'main'
