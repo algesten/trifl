@@ -53,8 +53,13 @@ layout = (regions, f) ->
             # set new view
             if vw
                 if regel = select(inner.el, sel)[0]
+                    # detach view from current region
+                    vw._rg null if vw._rg
+                    # remember it
                     views[name] = vw
+                    # append the dom node
                     regel.appendChild vw.el
+                    # and reference to this region
                     vw._rg = render[name]
             else
                 delete views[name]
