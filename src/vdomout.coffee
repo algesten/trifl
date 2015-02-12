@@ -51,21 +51,27 @@ prepareProps = (inp) ->
     # virtual-dom needs all other attributes in a special map.
     attrs = props.attributes = {}
     for k, v of inp
-        (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
-        props[k] = DataHook(v) if k[0...5] == 'data-'
+        isData = k[0...5] == 'data-'
+        if isData
+            props[k] = DataHook(v)
+        else
+            (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
     if inp.class
         # we have class
         props.className = inp.class
         delete props.class
     props
 
+# hook for dealing with data-* attributes
 class DataHook
     constructor: (@value) ->
         return new DataHook(@value) unless this instanceof DataHook
     hook: (node, name) ->
+        node.setAttribute name, @value
         node.dataset = {} unless node.dataset # for jsdom
         node.dataset[camelize(name.substring(5))] = @value
     unhook: (node, name) ->
+        node.removeAttribute name
         delete node.dataset[camelize(name[0...5])]
 
 camelize = (n) ->
