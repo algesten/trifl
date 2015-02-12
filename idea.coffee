@@ -22,8 +22,6 @@ onRoute = (p, q) ->
 isItem = (p, q) ->
     # determine whether p is item
 
-#route '/news/thehives-51423'
-
 appview = layout ->
     div class:'appview', ->
         div region('top')
@@ -47,14 +45,9 @@ newslist = view ->
 newsitem = view (item) ->
     # ... draw item
 
-# a view. the function is the redraw function which is passed the
-# model for that view.
-#
-# topnav = view (sel) ->
-#   ...
-#
-# topnav.el # DOM element
-#
-# topnav('home')
-#
-# draws the view into topnav.el
+
+action 'update-searchtext', text
+
+handle 'update-searchtext', (text, callback) ->
+    # update model1...
+    # update model2...
