@@ -1,4 +1,4 @@
-{route, navigate, path, exec, layout, view} = trifl
+{route, navigate, path, exec, layout, region, view} = trifl
 {div, ul, li, img} = tagg
 {iif, eq} = fnuc
 
@@ -24,10 +24,10 @@ isItem = (p, q) ->
 
 #route '/news/thehives-51423'
 
-appview = layout top:'.top', main:'.main', ->
+appview = layout ->
     div class:'appview', ->
-        div class:'top'
-        div class:'main'
+        div region('top')
+        div region('main')
 
 topnav = view (sel) ->
     nav = [

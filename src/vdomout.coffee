@@ -10,10 +10,8 @@ module.exports = class VDOMOut
 
     start: ->
 
-    begin: (name, vod, props) ->
-        if props.class
-            props.className = props.class
-            delete props.class
+    begin: (name, vod, inProps) ->
+        props = prepareProps inProps
         if vod
             throw new Error "Bad void element root: #{name}" unless @stack.length > 1
             @cur.childs.push {name, props}
@@ -38,3 +36,37 @@ module.exports = class VDOMOut
     end: ->
         @_childsToVTrees()
         @cur.vtrees[0]
+
+
+# these special properties should not to be put in the attributes map.
+NOT_ATTRIBUTES =
+    class: true
+    className: true
+    key: true
+    namespace: true
+    style: true
+
+prepareProps = (inp) ->
+    props = {}
+    # virtual-dom needs all other attributes in a special map.
+    attrs = props.attributes = {}
+    for k, v of inp
+        (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
+        props[k] = DataHook(v) if k[0...5] == 'data-'
+    if inp.class
+        # we have class
+        props.className = inp.class
+        delete props.class
+    props
+
+class DataHook
+    constructor: (@value) ->
+        return new DataHook(@value) unless this instanceof DataHook
+    hook: (node, name) ->
+        node.dataset = {} unless node.dataset # for jsdom
+        node.dataset[camelize(name.substring(5))] = @value
+    unhook: (node, name) ->
+        delete node.dataset[camelize(name[0...5])]
+
+camelize = (n) ->
+    n.replace /-(\w)/g, (_,c) -> c.toUpperCase()

@@ -24,30 +24,31 @@ describe 'VDOMOut', ->
 
     it 'renders the simplest div', ->
         vt = capture out, div
-        eqlvt vt, 'div', 0, {}
+
+        eqlvt vt, 'div', 0, attributes:{}
 
     it 'renders a simple div', ->
         vt = capture out, -> div()
-        eqlvt vt, 'div', 0, {}
+        eqlvt vt, 'div', 0, attributes:{}
 
     it 'renders a simple div with class', ->
         vt = capture out, -> div className:'foo'
-        eqlvt vt, 'div', 0, className:'foo'
+        eqlvt vt, 'div', 0, className:'foo', attributes:{}
 
     it 'complains if the node is a void element', ->
         assert.throws (-> capture out, -> img()), 'Bad void element root: img'
 
     it 'renders a simple two level tree', ->
         vt = capture out, -> div -> p()
-        eqlvt vt, 'div', 1, {}
-        eqlvt vt.children[0], 'p', 0, {}
+        eqlvt vt, 'div', 1, attributes:{}
+        eqlvt vt.children[0], 'p', 0, attributes:{}
 
     it 'renders a complex tree', ->
         vt = capture out, tree
-        eqlvt vt, 'div', 3, className:'special'
-        eqlvt vt.children[0], 'div', 1, className:'widget'
-        eqlvt vt.children[0].children[0], 'p', 1, {}
+        eqlvt vt, 'div', 3, {className:'special', attributes:{}}
+        eqlvt vt.children[0], 'div', 1, {className:'widget', attributes:{}}
+        eqlvt vt.children[0].children[0], 'p', 1, attributes:{}
         eql vt.children[0].children[0].children[0].text, 'with stuff'
-        eqlvt vt.children[1], 'p', 1, {}
+        eqlvt vt.children[1], 'p', 1, attributes:{}
         eql vt.children[1].children[0].text, 'nice pandas'
-        eqlvt vt.children[2], 'img', 0, src:'/panda.jpg'
+        eqlvt vt.children[2], 'img', 0, attributes:src:'/panda.jpg'

@@ -25,44 +25,68 @@ detach = (view) ->
     delete view._rg
     view?.el?.parentNode?.removeChild view.el
 
+# marks a region as "data-region:<name>"
+region = (n) -> "data-region":n
 
-srlz = require('jsdom').serializeDocument
+# helper to walk a dom tree
+walk = (node, f) -> f node; walk c, f for c in node.childNodes
 
+layout = (f) ->
 
-layout = (regions, f) ->
-    views = {}
+    # regions name:view (or name:false initially)
+    regions = {}
+
+    # the actual view function
     inner = view f
+
+    # view function wrapper
     render = (as...) ->
         try
             # detach views
-            detach vw for name, vw of views
+            detach vw for name, vw of regions when vw
             # run the original render
             return inner as...
         finally
             # update el
             render.el = inner.el
-            # reset child views
-            render[name]? vw for name, vw of views
-    # layouts are prerendered
-    render()
-    # pick out regions
-    for name, sel of regions
-        render[name] = do (name, sel) -> (vw) ->
-            # detach previous view if there
-            detach prev if (prev = views[name])?.el?.parentNode?
-            # set new view
-            if vw
-                if regel = select(inner.el, sel)[0]
+            # remember old regions
+            prevRegions = regions
+            # update it all
+            makeRegionFunctions()
+            # move child views to new regions
+            render[name]? vw for name, vw of prevRegions when vw
+
+    makeRegionFunctions = ->
+        # reset
+        regions = {}
+        # pick out data-region="<name>" attributes
+        walk render.el, (node) ->
+
+            # region name
+            name = node.dataset?.region
+            return unless name # not a region node
+
+            regions[name] = false # init marker
+
+            # region function
+            render[name] = (vw) ->
+                detach prev if (prev = regions[name])?.el?.parentNode?
+                # set new view
+                if vw
                     # detach view from current region
                     vw._rg null if vw._rg
-                    # remember it
-                    views[name] = vw
+                    regions[name] = vw
                     # append the dom node
-                    regel.appendChild vw.el
+                    node.appendChild vw.el
                     # and reference to this region
                     vw._rg = render[name]
-            else
-                delete views[name]
+                else
+                    delete regions[name]
+
+    # layouts are prerendered
+    render()
+
+    # return render function
     render
 
-module.exports = {view, layout}
+module.exports = {view, layout, region}
