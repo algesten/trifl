@@ -1,0 +1,11 @@
+#!/usr/bin/env coffee
+
+fs   = require 'fs'
+exec = require('child_process').exec
+
+fs.watch 'src', (ev, name) ->
+    return unless name.match  /^\w+\.coffee$/
+    console.log 'recompile'
+    exec 'npm run compile', (err, sout, serr) ->
+        throw err if err
+        process.stdout.write serr if serr
