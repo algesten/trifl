@@ -69,7 +69,8 @@ router = null
 do init = ->
     `router = new Router(window)`
 
-module.exports = {route:router.route, path:router.path, navigate:router.navigate}
+module.exports = {route:router.route, path:router.path,
+    exec:router.exec, navigate:router.navigate}
 
 # expose router/reinit for tests
 if global?.__TEST_ROUTER
