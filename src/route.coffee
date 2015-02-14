@@ -37,20 +37,30 @@ class Router
         return true
 
     _check: =>
-        return false if @loc.pathname == @win.pathname and @loc.search == @win.search
-        @_run @win.pathname, @win.search
+        winloc = @win.location
+        return false if @loc.pathname == winloc.pathname and @loc.search == winloc.search
+        @_run winloc.pathname, winloc.search
 
     _run: (pathname = '/', search = '') ->
         @loc.pathname = pathname
         @loc.search   = search
         q = query if search[0] == '?' then search.substring(1) else search
-        @_consume pathname, 0, q, @_route
+        try
+            _lazylayout true
+            @_consume pathname, 0, q, @_route
+        finally
+            _lazylayout false
 
     navigate: (url) =>
         @win.history.pushState {}, '', url
         @_check()
 
-    route: (f)    => @_route = f
+    route: (f)    =>
+        @_route = f
+        #reset
+        @loc = {}
+        # and start again
+        router._check()
     path:  (p, f) => @_path? p, f
     exec:  (f)    => @_exec? f
 

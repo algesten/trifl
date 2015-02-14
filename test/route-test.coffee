@@ -65,21 +65,21 @@ describe 'route', ->
                 router.loc.search   = '?panda=true'
 
             it 'compares pathname/search and does nothing if they are the same', ->
-                router.win.pathname = '/a/path'
-                router.win.search   = '?panda=true'
+                window.location.pathname = '/a/path'
+                window.location.search   = '?panda=true'
                 eql router._check(), false
                 eql router._run.callCount, 0
 
             it 'compares pathname/search and executes _run if pathname differs', ->
-                router.win.pathname = '/another/path'
-                router.win.search   = '?panda=true'
+                window.location.pathname = '/another/path'
+                window.location.search   = '?panda=true'
                 eql router._check(), true
                 eql router._run.callCount, 1
                 eql router._run.args[0], ['/another/path', '?panda=true']
 
             it 'compares pathname/search and executes _run if search differs', ->
-                router.win.pathname = '/a/path'
-                router.win.search   = '?kitten=true'
+                window.location.pathname = '/a/path'
+                window.location.search   = '?kitten=true'
                 eql router._check(), true
                 eql router._run.callCount, 1
                 eql router._run.args[0], ['/a/path', '?kitten=true']
@@ -129,24 +129,32 @@ describe 'route', ->
             eql r.callCount, 0
             eql e.callCount, 0
 
+        it 'execute route straight away', ->
+            route r = spy()
+            eql r.callCount, 1
+
         it 'executes the route set', ->
             r = e = null
+            window.location =
+                pathname:'/a/path'
+                search:'?foo=bar'
             route r = spy ->
                 exec e = spy ->
-            router._run '/a/path', '?foo=bar'
             eql r.callCount, 1
             eql r.args[0], []
             eql e.callCount, 1
             eql e.args[0], ['/a/path', foo:'bar']
 
         it 'executes to the end and no more', ->
-            r1 = r2 = e = null
-            route spy ->
+            s = r1 = r2 = e = null
+            # default is "/some/path"
+            route s = spy ->
                 path '/a/path', ->
                     exec e = spy ->
                     path '/', r1 = spy ->
                     path '', r2 = spy ->
             router._run '/a/path', '?foo=bar'
+            eql s.callCount, 2
             eql r1.callCount, 0
             eql r2.callCount, 1
             eql r2.args[0], []
