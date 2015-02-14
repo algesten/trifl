@@ -1,11 +1,10 @@
-eql = assert.deepEqual
-
-query = router = reinit = route = path = exec = navigate = null
-
 describe 'route', ->
+
+    query = router = reinit = route = path = exec = navigate = _window = null
 
     beforeEach ->
         global.__TEST_ROUTER = true
+        _window = global.window
         global.window =
             addEventListener: spy ->
             location:
@@ -18,7 +17,7 @@ describe 'route', ->
         {route, path, exec, navigate} = router
 
     afterEach ->
-        delete global.window
+        global.window = _window
 
     describe 'query', ->
 

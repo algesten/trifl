@@ -1,14 +1,12 @@
 {capture, div, p, img} = require 'tagg'
 VDOMOut = require '../src/vdomout'
 
-eql = assert.deepEqual
+describe 'VDOMOut', ->
 
-eqlvt = (vt, n, c, p) ->
+    eqlvt = (vt, n, c, p) ->
         eql vt.tagName, n
         eql vt.properties, p
         eql vt.children.length, c
-
-describe 'VDOMOut', ->
 
     tree = ->
         div class:'special', ->

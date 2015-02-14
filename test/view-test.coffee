@@ -1,10 +1,7 @@
 srlz = require('jsdom').serializeDocument
 {div, p, input} = require 'tagg'
 
-eql = assert.deepEqual
-
 {view, layout, region} = require '../src/view'
-
 
 describe 'view', ->
 
