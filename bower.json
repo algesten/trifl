@@ -5,8 +5,8 @@
   "homepage": "https://github.com/algesten/trifl",
   "author": "Martin Algesten <martin@algesten.se>",
   "main": "lib/trifl.js",
-  "license": "MIT",e
-    "keywords": [
+  "license": "MIT",
+  "keywords": [
     "view",
     "model",
     "router",
