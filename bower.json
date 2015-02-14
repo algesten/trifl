@@ -1,0 +1,24 @@
+{
+  "name": "trifl",
+  "version": "0.0.1",
+  "description": "trifling functional views",
+  "homepage": "https://github.com/algesten/trifl",
+  "author": "Martin Algesten <martin@algesten.se>",
+  "main": "lib/trifl.js",
+  "license": "MIT",e
+    "keywords": [
+    "view",
+    "model",
+    "router",
+    "functional",
+    "client",
+    "browser"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
