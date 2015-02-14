@@ -125,7 +125,9 @@
 \i0  are triggered either by the user or the server.\
 {\listtext	2.	}the 
 \i dispatcher
-\i0  function for an action propagates the actions to the model.\
+\i0  function for an action propagates the action to the 
+\i models
+\i0 .\
 {\listtext	3.	}
 \i models
 \i0  update their state accordingly and emits 
@@ -133,7 +135,7 @@
 \i0 -actions to indicate changes.\
 {\listtext	4.	}the 
 \i controller
-\i0  function for an update propagates the update to the 
+\i0  function for an update propagates that update to the 
 \i views
 \i0 .\
 {\listtext	5.	}the 
@@ -148,7 +150,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{680.31495666503861, 371.33858051300052}, {28.346456527709972, 28.346456527709961}}</string>
+			<string>{{683.14960231781004, 371.33858051300047}, {28.346456527709972, 28.346456527709961}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -2114,7 +2116,7 @@ Action}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2015-02-14 06:33:08 +0000</string>
+	<string>2015-02-14 06:36:21 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Algesten</string>
 	<key>NotesVisible</key>
@@ -2209,15 +2211,15 @@ Action}</string>
 		<key>TopSlabHeight</key>
 		<real>250</real>
 		<key>VisibleRegion</key>
-		<string>{{-48, -108}, {903.40134296155122, 752.38093773755691}}</string>
+		<string>{{202.72108448986614, 79.931971233420384}, {451.70067148077555, 376.19046886877851}}</string>
 		<key>Zoom</key>
-		<real>0.73500001430511475</real>
+		<real>1.4700000286102295</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
 				<string>Canvas 1</string>
-				<real>0.73500001430511475</real>
 				<real>1.4700000286102295</real>
+				<real>0.73500001430511475</real>
 			</array>
 		</array>
 	</dict>
