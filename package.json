@@ -2,9 +2,10 @@
   "name": "trifl",
   "version": "0.0.1",
   "description": "trifling functional views",
-  "main": "lib/trifl.js",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "compile": "coffee -o lib -c src && browserify index.js > lib/trifl.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/algesten/trifl",
   "devDependencies": {
+    "browserify": "*",
     "chai": "^1.10.0",
     "coffee-script": "^1.9.0",
     "jsdom": "^3.1.1",
