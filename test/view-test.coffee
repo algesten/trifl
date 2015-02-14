@@ -1,4 +1,3 @@
-srlz = require('jsdom').serializeDocument
 {div, p, input} = require 'tagg'
 
 {view, layout, region, _lazylayout} = require '../src/view'

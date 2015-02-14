@@ -3,6 +3,10 @@
 {select, OrderedMap} = require './fun'
 VDOMOut = require './vdomout'
 
+# global or window, who knows.
+glob = null
+`glob = global || window`
+
 view = (f) ->
     render = (as...) ->
         # output render function to vtree
@@ -15,7 +19,7 @@ view = (f) ->
         render._vt = vt
         render.el
     # placeholder el div
-    render.el = create render._vt = capture new VDOMOut(), div
+    render.el = create (render._vt = capture new VDOMOut(), div), document:glob.document
     render
 
 
