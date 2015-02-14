@@ -39,15 +39,34 @@ topnav = view (sel) ->
 hero = view ->
     img class:'heroimg', src:'/bigpic.jpg'
 
-newslist = view ->
+newslist = view (list) ->
     # ... draw list of news
 
 newsitem = view (item) ->
     # ... draw item
 
 
-action 'update-searchtext', text
+io.on 'newsitem', (item) ->
+    action 'new-newsitem', item
 
-handle 'update-searchtext', (text, done) ->
-    forward model1.handle
-    forward model2.handle
+
+
+# ###### dispatcher function
+handle 'new-newsitem', (item) ->
+    # update the models
+    model.newslist.addItem item
+
+
+# ###### model
+model.newslist = {
+    # ...
+    addItem: (item) =>
+        @myitems.push item
+        update 'newslist'
+}
+
+
+# ###### controller
+handle 'update:newslist', ->
+    # view redraw newslist
+    newslist model.newslist
