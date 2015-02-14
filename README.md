@@ -59,8 +59,8 @@ call                   | description
 
 call                   | description
 :----------------------|:-------------
-`route(f)`             | Declares the route function that will be invoked each time the url changes. There can only be one such function.
-`path(p,f)`            | As part of `route` declares a function that "consumes" part of the current url and executes the function.
+`route(f)`             | Declares the route function `f` that will be invoked each time the url changes. There can only be one such function.
+`path(p,f)`            | As part of `route` declares a function `f` that "consumes" part `p` of the current url and executes the function.
 `exec(f)`              | As part of `route` executes `f` passing the current `path` and `query`.
 `navigate(l)`          | Navigates the location `l` using push state.
 
