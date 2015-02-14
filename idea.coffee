@@ -48,6 +48,6 @@ newsitem = view (item) ->
 
 action 'update-searchtext', text
 
-handle 'update-searchtext', (text, callback) ->
-    # update model1...
-    # update model2...
+handle 'update-searchtext', (text, done) ->
+    forward model1.handle
+    forward model2.handle
