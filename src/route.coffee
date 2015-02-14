@@ -1,4 +1,5 @@
 {startswith, indexof} = require './fun'
+{_lazylayout}         = require './view'
 
 replaceplus = (s) -> s.replace /\+/g, ' '
 decode      = (s) -> decodeURIComponent replaceplus s

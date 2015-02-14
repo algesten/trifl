@@ -1,6 +1,6 @@
 {diff, patch, create} = require 'virtual-dom'
 {capture, div} = require 'tagg'
-{select} = require './fun'
+{select, OrderedMap} = require './fun'
 VDOMOut = require './vdomout'
 
 view = (f) ->
@@ -31,7 +31,16 @@ region = (n) -> "data-region":n
 # helper to walk a dom tree
 walk = (node, f) -> f node; walk c, f for c in node.childNodes
 
+# an OrderedMap if we are _lazylayout(true)
+_lazy = null
+
+# internal id counter to keep layouts apart
+lcount = 0
+
 layout = (f) ->
+
+    # this layout's id, used to keep lazy eval apart
+    lid = lcount++
 
     # regions name:view (or name:false initially)
     regions = {}
@@ -41,6 +50,7 @@ layout = (f) ->
 
     # view function wrapper
     render = (as...) ->
+        throw new Error("Refusing to render layout when lazy evaluating") if _lazy
         try
             # detach views
             detach vw for name, vw of regions when vw
@@ -69,7 +79,8 @@ layout = (f) ->
             regions[name] = false # init marker
 
             # region function
-            render[name] = (vw) ->
+            render[name] = rg = (vw) ->
+                return _lazy.set lid+":"+name, (->rg vw) if _lazy
                 detach prev if (prev = regions[name])?.el?.parentNode?
                 # set new view
                 if vw
@@ -89,4 +100,12 @@ layout = (f) ->
     # return render function
     render
 
-module.exports = {view, layout, region}
+_lazylayout = (suspend) ->
+    if suspend
+        _lazy = new OrderedMap() unless _lazy
+    else if _lazy
+        l = _lazy
+        _lazy = null
+        l.get(k)() for k in l.order
+
+module.exports = {view, layout, region, _lazylayout}

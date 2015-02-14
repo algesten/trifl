@@ -16,4 +16,13 @@ select = (node, sel) ->
     finally
         doc.body.removeChild node if doc
 
-module.exports = {startswith, indexof, select, concat, mixin}
+class OrderedMap
+    constructor: ->
+        @order = []
+        @map = {}
+    set: (k, v) ->
+        @order.push k unless @map.hasOwnProperty(k)
+        @map[k] = v
+    get: (k) -> @map[k]
+
+module.exports = {startswith, indexof, select, concat, mixin, OrderedMap}

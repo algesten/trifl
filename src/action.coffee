@@ -1,3 +1,5 @@
+{_lazylayout} = require './view'
+
 # singleton {name:handler}
 handlers = {}
 
@@ -22,6 +24,7 @@ doAction = (name, as) ->
     throw new Error "Rejected (#{name}) during action: #{current}" if current
     try
         current = name
+        _lazylayout true
         return handlers[name]? as...
     finally
         # have local copy, reject further updates
@@ -33,5 +36,6 @@ doAction = (name, as) ->
             # new updates receiver and current action is done
             updates = {}
             current = null
+            _lazylayout false
 
 module.exports = {handle, action, update}
