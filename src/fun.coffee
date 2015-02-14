@@ -16,4 +16,4 @@ select = (node, sel) ->
     finally
         doc.body.removeChild node if doc
 
-module.exports = {startswith, indexof, select}
+module.exports = {startswith, indexof, select, concat, mixin}

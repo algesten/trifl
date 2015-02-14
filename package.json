@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "compile": "coffee -o lib -c src && browserify index.js > lib/trifl.js"
+    "compile": "coffee -o lib -c src && browserify index.js -s trifl -o lib/trifl.js"
   },
   "repository": {
     "type": "git",
