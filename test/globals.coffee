@@ -1,4 +1,5 @@
 unless global.window
+
     jsdom           = require('jsdom').jsdom
     global.window   = jsdom().defaultView
     global.document = window.document
