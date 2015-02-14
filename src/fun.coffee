@@ -3,6 +3,7 @@ builtin    = I.bind.bind I.call
 startswith = (s, i) -> s.slice(0, i.length) == i
 indexof    = builtin String::indexOf
 concat     = (as...) -> [].concat as...
+mixin      = (os...) -> r = {}; r[k] = v for k, v of o for o in os; r
 
 select = (node, sel) ->
     doc = node.ownerDocument unless node.parentNode
@@ -15,4 +16,4 @@ select = (node, sel) ->
     finally
         doc.body.removeChild node if doc
 
-module.exports = {startswith, indexof, select, concat}
+module.exports = {startswith, indexof, select}
