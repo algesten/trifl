@@ -25,7 +25,7 @@ This exposes the global object `trifl`.
 
 #### With coffeescript
 
-Use destructuring assignment to pick out the function wanted.
+Use destructuring assignment to pick out the functions wanted.
 
 ```coffee
 {action, updated, handle, view, layout, region, route, path, exec, navigate} = trifl
@@ -35,14 +35,23 @@ action 'dostuff', arg
 
 #### With javascript
 
-Use the functions off the trifle object or declare them separate.
+Use the functions off the `trifl` object or declare them separate.
 
 ```javascript
-trifle.action('dostuff', arg);
+trifl.action('dostuff', arg);
 
 // or
 
-var action = trifle.action;
+var action   = trifl.action;
+var updated  = trifl.updated;
+var handle   = trifl.handle;
+var view     = trifl.view;
+var layout   = trifl.layout;
+var region   = trifl.region;
+var route    = trifl.route;
+var path     = trifl.path;
+var exec     = trifl.exec;
+var navigate = trifl.navigate;
 
 action('dostuff', arg);
 
