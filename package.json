@@ -1,6 +1,6 @@
 {
   "name": "trifl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "trifling functional views",
   "main": "index.js",
   "scripts": {
