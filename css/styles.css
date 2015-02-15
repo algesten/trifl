@@ -16,12 +16,26 @@ body {
     font-size: 18px;
     line-height: 1.7em;
 }
+@media only screen and (max-width: 739px) {
+    body {
+        font-size: 16px;
+    }
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
 
 .top {
     border-top: 5px solid #53a259;
 }
 .top .container {
     padding: 0 30px;
+}
+@media only screen and (max-width: 739px) {
+    .top .container {
+        padding: 0 15px;
+    }
 }
 .fork {
     position: absolute;
