@@ -37,18 +37,13 @@ API
 
 The API consists of 10 functions plus [tagg][tagg].
 
-[`action`](#action)
-[`updated`](#updated)
-[`handle`](#handle)
-[`view`](#view)
-[`layout`](#layout)
-[`region`](#region)
-[`route`](#route)
-[`path`](#path)
-[`exec`](#exec)
-[`navigate`](#navigate)
+**Action:** [`action`](#action) [`updated`](#updated) [`handle`](#handle)
 
+**View:** [`view`](#view) [`layout`](#layout) [`region`](#region)
 
+**Route:** [`route`](#route) [`path`](#path) [`exec`](#exec) [`navigate`](#navigate)
+
+Tagg is a template library for writing markup as coffeescript.
 
 ### Actions and Handlers
 
