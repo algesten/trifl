@@ -1,0 +1,11 @@
+{
+  "name": "trifl-pages",
+  "version": "0.0.0",
+  "devDependencies": {
+    "coffee-script": "^1.9.0",
+    "simple-bufferstream": "0.0.4",
+    "tagg": "0.0.4",
+    "tlbx": "0.0.4"
+  },
+  "private": true
+}

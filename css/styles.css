@@ -1,0 +1,151 @@
+/*
+@blue:   #66a7bb;
+@dark:   #22353e;
+@green:  #53a259;
+@grey:   #333333;
+@purple: #5f283f;
+*/
+
+body {
+    background: #2b2b2c;
+    color: #ccc;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    -webkit-font-smoothing: subpixel-antialiased;
+    text-rendering: optimizeLegibility;
+    font-smooth: always;
+    font-size: 18px;
+    line-height: 1.7em;
+}
+
+.top {
+    border-top: 5px solid #53a259;
+}
+.top .container {
+    padding: 0 30px;
+}
+
+.main {
+    margin-top: 30px;
+}
+
+h1 {
+    line-height: 1.5em;
+    margin-top: 0.6em;
+    margin-bottom: 0.4em;
+    font-size: 3em;
+}
+h2 {
+    margin-top: 1em;
+}
+h1, h2, h3 {
+    font-weight: 600;
+    color: #53a259;
+    border-bottom: 3px solid #888;
+    display: inline-block;
+    line-height: 1em;
+}
+h3 {
+    line-height: 1.1em;
+    border-bottom: 2px solid #888;    
+}
+
+.compare {
+    overflow: auto;
+}
+
+p {
+    margin-top: 1em;
+}
+
+.compare > div {
+    position: relative;
+    padding: 10px 20px;
+}
+.compare > div:before {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    font-size: 0.6em;
+    text-transform: uppercase;
+    color: #4b4b4c;
+}
+.compare > div:first-child {
+    background: #3f1f1f;
+}
+.compare > div:first-child:before {
+    content: "coffeescript";
+}
+.compare > div:last-child {
+    background: #22293e;
+}
+.compare > div:last-child:before {
+    content: "javascript";
+}
+.compare h2 {
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    font-size: 0.7em;
+    color: #888;
+}
+.compare p {
+    margin: 0.5em 0 0.5em;
+}
+.compare p:first-child {
+    margin-top: 0;
+}
+
+
+
+.docblock, .compare, .split {
+    clear: both;
+}
+.docblock {
+    padding: 0 10px;
+}
+
+h3 {
+    font-size: 1.225rem;
+}
+
+figure {
+    text-align: center;
+}
+img {
+    width: 100%;
+    max-width: 700px;
+}
+
+pre[class*="language-"] {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    margin: 0;
+    padding: 0;
+    background: rgba(0,0,0,0.2);
+    margin-left: -10px;
+    padding-top: 3px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    margin-right: -10px;
+}
+
+code {
+    font-size: 14px;
+}
+code[class*="language-"], pre[class*="language-"] {
+    text-shadow: none;
+    color: #ccc;
+}
+.footer {
+    min-height: 400px;
+}
+.footer .container {
+    padding: 0 30px;
+}
+.copyright {
+    padding-top: 4em;
+    font-size: 0.8em;
+    float: right;
+}

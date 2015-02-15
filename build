@@ -1,0 +1,34 @@
+#!/usr/bin/env coffee
+
+{compile}  = require 'coffee-script'
+{readutf8, stat, readdir, pjoin,
+basename, dirname, writestream, pipe} = require 'tlbx'
+sbuff   = require 'simple-bufferstream'
+
+todo = [
+    'index.coffee'
+]
+
+process = (f) ->
+    abs = pjoin __dirname, f
+    stat(f).then (st) ->
+        if st.isDirectory()
+            readdir(abs).each(process)
+        else
+            compileFile abs
+    .done()
+
+compileFile = (abs) ->
+    readutf8(abs).then (s) ->
+        compile s, bare:true
+    .then (src) ->
+        eval src
+    .then (html) ->
+        outname = pjoin dirname(abs), basename(abs,'.coffee') + '.html'
+        out = writestream outname
+        {out, html}
+    .all ({out, html}) ->
+        pipe sbuff(new Buffer(html)), out
+    .done()
+
+todo.forEach (f) -> process f
