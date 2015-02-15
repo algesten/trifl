@@ -54,6 +54,7 @@ class Router
     navigate: (url) =>
         @win.history.pushState {}, '', url
         @_check()
+        return undefined
 
     route: (f)    =>
         @_route = f
@@ -61,6 +62,8 @@ class Router
         @loc = {}
         # and start again
         router._check()
+        return undefined
+
     path:  (p, f) => @_path? p, f
     exec:  (f)    => @_exec? f
 

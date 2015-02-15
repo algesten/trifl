@@ -1,4 +1,4 @@
-{handle, action, update} = require '../src/action'
+{handle, action, updated} = require '../src/action'
 
 describe 'action', ->
 
@@ -23,6 +23,11 @@ describe 'action', ->
         action 'dostuff'
         eql s.callCount, 1
 
+    it 'receives the return value of the handler', ->
+        handle 'dostuff', (v) -> v * 2
+        r = action 'dostuff', 42
+        eql r, 84
+
 describe 'handle', ->
 
     it 'registers exactly on handler function', ->
@@ -31,19 +36,24 @@ describe 'handle', ->
         action 'dothings'
         eql s.callCount, 1
 
-describe 'update', ->
+    it 'returns the function declared', ->
+        f = ->
+        r = handle 'dothing', f
+        assert.equal r, f
+
+describe 'updated', ->
 
     it 'is not allowed outside handlers', ->
-        assert.throws (->update 'nope'), 'Rejected (update:nope) outside action'
+        assert.throws (->updated 'nope'), 'Rejected (update:nope) outside action'
 
     it 'ignores non handled updates', ->
-        handle 'dostuff', -> update 'ignore me'
+        handle 'dostuff', -> updated 'ignore me'
         action 'dostuff'
 
     it 'can invoke multiple updates', ->
         handle 'dostuff', ->
-            update 'one change'
-            update 'another change'
+            updated 'one change'
+            updated 'another change'
         handle 'update:one change', s1 = spy()
         handle 'update:another change', s2 = spy()
         action 'dostuff'
@@ -54,7 +64,7 @@ describe 'update', ->
         c1 = spy()
         c2 = spy()
         handle 'dostuff', s1 = spy ->
-            update 'it changed', 'ignored'
+            updated 'it changed', 'ignored'
             c1()
         handle 'update:it changed', s2 = spy()
         action 'dostuff'
@@ -69,15 +79,15 @@ describe 'update', ->
 
     it 'only executes once', ->
         handle 'dostuff', ->
-            update 'it changed'
-            update 'it changed'
+            updated 'it changed'
+            updated 'it changed'
         handle 'update:it changed', s = spy()
         action 'dostuff'
         eql s.callCount, 1
 
     it 'rejects actions in updates', ->
         handle 'dostuff', ->
-            update 'a change'
+            updated 'a change'
         handle 'update:a change', s = spy ->
             assert.throws (->action 'do more stuff'),
                 'Rejected (do more stuff) during action: dostuff'
@@ -86,9 +96,18 @@ describe 'update', ->
 
     it 'rejects updates in updates', ->
         handle 'dostuff', ->
-            update 'a change'
+            updated 'a change'
         handle 'update:a change', s = spy ->
-            assert.throws (->update 'another change'),
+            assert.throws (->updated 'another change'),
                 'Rejected (update:another change) during updates for: dostuff'
+        action 'dostuff'
+        eql s.callCount, 1
+
+    it 'returns undefined', ->
+        handle 'dostuff', ->
+            r = updated 'a change'
+            eql r, undefined
+        handle 'update:a change', s = spy ->
+            return 42 # should never be received
         action 'dostuff'
         eql s.callCount, 1

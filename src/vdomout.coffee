@@ -72,7 +72,7 @@ class DataHook
         node.dataset[camelize(name.substring(5))] = @value
     unhook: (node, name) ->
         node.removeAttribute name
-        delete node.dataset[camelize(name[0...5])]
+        delete node.dataset[camelize(name.substring(5))]
 
 camelize = (n) ->
     n.replace /-(\w)/g, (_,c) -> c.toUpperCase()

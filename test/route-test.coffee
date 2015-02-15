@@ -121,6 +121,10 @@ describe 'route', ->
             navigate '/a/path?foo=bar'
             eql router._check.callCount, 1
 
+        it 'returns undefined', ->
+            r = navigate '/a',
+            eql r, undefined
+
     describe 'route/path/exec', ->
 
         it 'outside route, nothing', ->
@@ -132,6 +136,24 @@ describe 'route', ->
         it 'execute route straight away', ->
             route r = spy()
             eql r.callCount, 1
+
+        it 'route returns undefined', ->
+            r = route ->
+            eql r, undefined
+
+        it 'path returns undefined', ->
+            r = path ->
+            eql r, undefined
+
+        it 'exec returns undefined outside route', ->
+            r = exec (p, q) -> 42
+            eql r, undefined
+
+        it 'exec returns the result of the executed function inside route', ->
+            route s = spy ->
+                r = exec (p, q) -> 42
+                eql r, 42
+            eql s.callCount, 1
 
         it 'executes the route set', ->
             r = e = null

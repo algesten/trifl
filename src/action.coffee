@@ -8,34 +8,36 @@ handle = (name, handler) -> handlers[name] = handler
 
 # name of only one action executing at a time
 current = null
-# updates to happen once current is finished
-updates = {}
+# updated to happen once current is finished
+updated = {}
 
 # execute an action
 action = (name, as...) -> doAction name, as
 
-update = (name) ->
+updated = (name) ->
     qname = "update:#{name}"
     throw new Error "Rejected (#{qname}) outside action" unless current
-    throw new Error "Rejected (#{qname}) during updates for: #{current}" unless updates
-    updates[qname] = true
+    throw new Error "Rejected (#{qname}) during updates for: #{current}" unless updated
+    updated[qname] = true
+    return undefined
 
 doAction = (name, as) ->
     throw new Error "Rejected (#{name}) during action: #{current}" if current
     try
         current = name
         _lazylayout true
+        # return value of the handler
         return handlers[name]? as...
     finally
-        # have local copy, reject further updates
-        _updates = updates
-        updates = null
+        # have local copy, reject further updated
+        _updated = updated
+        updated = null
         try
-            handlers[qname]?() for qname of _updates
+            handlers[qname]?() for qname of _updated
         finally
-            # new updates receiver and current action is done
-            updates = {}
+            # new updated receiver and current action is done
+            updated = {}
             current = null
             _lazylayout false
 
-module.exports = {handle, action, update}
+module.exports = {handle, action, updated}
