@@ -4,6 +4,8 @@ ol, li, img, figure, figcaption, i, pre, code, a} = require 'tagg'
 html5 ->
     head ->
         meta charset:'utf-8'
+        meta name:"viewport", content:"width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         title 'trifl - trifling functional views'
         link rel:'stylesheet', href:'css/base.css'
         link rel:'stylesheet', href:'css/prism.css'
