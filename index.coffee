@@ -1,5 +1,5 @@
 {html5, head, meta, title, link, script, body, div, h1, h2, h3, p, ul,
-ol, li, img, figure, figcaption, i, pre, code} = require 'tagg'
+ol, li, img, figure, figcaption, i, pre, code, a} = require 'tagg'
 
 html5 ->
     head ->
@@ -9,11 +9,15 @@ html5 ->
         link rel:'stylesheet', href:'css/prism.css'
         link rel:'stylesheet', href:'css/styles.css'
     body ->
+
         div class:'top', ->
             div class:'container', ->
                 h1 'trifl'
                 p 'a functional web client user interface library
                     with a unidirectional dataflow and a virtual dom.'
+            div class:'fork', ->
+                a href:'https://github.com/algesten/trifl', 'fork me on github'
+
         div class:'main', ->
             div class:'container', ->
                 div class:'docblock', ->
@@ -44,17 +48,19 @@ html5 ->
 
                 div class:'compare', ->
                     div class:'col col-6 mobile-full', ->
-                        p 'Declare a handler'
+                        p 'Declare a dispatcher function'
                         pre -> code class:'language-coffeescript', ->
                           'handler "selectarticle", (articleid) ->\n' +
+                          '    # action updates the model\n' +
                           '    model.articles.requestArticle(articleid)\n\n'
                         p 'Trigger an action'
                         pre -> code class:'language-coffeescript', ->
                           'action "selectarticle", "slugattack01"'
                     div class:'col col-6 mobile-full', ->
-                        p 'Declare a handler'
+                        p 'Declare a dispatcher function'
                         pre -> code class:'language-javascript', ->
                           'handler("selectarticle", function(articleid) {\n' +
+                          '    // action updates the model\n' +
                           '    model.articles.requestArticle(articleid);\n' +
                           '});'
                         p 'Trigger an action'
@@ -71,7 +77,7 @@ html5 ->
 
                     h3 'dispatchers and controllers'
                     p 'Handlers come in two variants that work exactly the same, but are
-                    mentally separated to know what part of the code they are in.'
+                    mentally separate to know what part of the code they belong in.'
 
                     ul ->
                         li 'action – ', (-> i 'dispatcher function'), ' (handler)'
@@ -85,6 +91,51 @@ html5 ->
                         img src:'assets/trifl-action2view.svg'
                         figcaption 'figure showing action → module updates → view updates.'
 
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+                        p 'Declare a controller function'
+                        pre -> code class:'language-coffeescript', ->
+                          'handler "update:articles", ->\n' +
+                          '    # rerender views\n' +
+                          '    views.articleCount model.articles\n' +
+                          '    views.articleView model.articles\n\n'
+                        p 'Trigger an update (as part of an action)'
+                        pre -> code class:'language-coffeescript', ->
+                          'model.articles = {\n' +
+                          '  requestArticle: (articleid) =>\n' +
+                          '    url = "/get/#{articleid}"\n' +
+                          '    $.ajax(url).done (article) ->\n' +
+                          '      # trigger action with the update\n'+
+                          '      action "gotarticle", article \n' +
+                          '    @state = "requesting"\n' +
+                          '    updated "articles"\n' +
+                          '}\n\n\n\n'
+                    div class:'col col-6 mobile-full', ->
+                        p 'Declare a controller function'
+                        pre -> code class:'language-javascript', ->
+                          'handler("selectarticle", function(articleid) {\n' +
+                          '    // render views\n' +
+                          '    views.articleCount(model.articles);\n' +
+                          '    views.articleView(model.articles);\n' +
+                          '});'
+                        p 'Trigger an update (as part of an update)', ->
+                        pre -> code class:'language-javascript', ->
+                          'model.articles = {\n' +
+                          '  requestArticle: function(articleid) {\n' +
+                          '    var url = "/get" + articleid";\n' +
+                          '    var _this = this;\n' +
+                          '    $.ajax(url).done(function(data) {\n' +
+                          '      // trigger action with the update\n' +
+                          '      action("gotarticle", article);\n' +
+                          '    });\n' +
+                          '    this.state = "requesting";\n' +
+                          '    updated("articles");\n' +
+                          '  }\n' +
+                          '};'
+
+                div class:'docblock', ->
+                    h2 'views'
+                    p 'Views render a model state into something the user can see.'
 
 
         script src:'js/prism.js'

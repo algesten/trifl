@@ -23,6 +23,24 @@ body {
 .top .container {
     padding: 0 30px;
 }
+.fork {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.fork a {
+    font-size: 0.9em;
+    background: #53a259;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.1em 0.9em;
+}
+
+a {
+    color: #53a259;
+}
 
 .main {
     margin-top: 30px;
@@ -46,15 +64,17 @@ h1, h2, h3 {
 }
 h3 {
     line-height: 1.1em;
-    border-bottom: 2px solid #888;    
+    border-bottom: 2px solid #888;
 }
 
 .compare {
     overflow: auto;
+    margin-top: 2em;
 }
 
 p {
-    margin-top: 1em;
+    margin-top: 1.6em;
+    margin-bottom: 1em;
 }
 
 .compare > div {
