@@ -20,12 +20,13 @@ unidirectional dataflow and a [virtual dom][vdom]. Compared to other
 libraries, trifl makes less out of dispatchers, controllers and model
 stores.
 
-Trifl consists of three parts: the actions, views and router. The
+Trifl consists of three parts: [actions](#actions-and-handlers),
+[views](#views-and-layouts) and [router](#router-and-paths). The
 *actions* are helper functions to aid decoupling of the application
 parts. *Views* are render functions whose purpose is make dom nodes
 reflect some model state. The *router* is a utility for organising a
-url space into which views are visible and firing actions as results
-of url changes.
+url space into visible views and firing actions as results of url
+changes.
 
 Trifl doesn't make components out of *dispatchers* and *controllers* –
 they are simple functions, and *models* are nowhere to be found –
