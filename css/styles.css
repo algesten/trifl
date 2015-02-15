@@ -37,20 +37,33 @@ body {
         padding: 0 15px;
     }
 }
-.fork {
-    position: absolute;
-    top: 0;
-    right: 0;
+.fork a {
 }
 
-.fork a {
+.buttons {
+    text-align: center;
+    position: absolute;
+    right: 0px;
+    top: 5px;
+}
+
+a.button {
     font-size: 0.9em;
-    background: #53a259;
+    background: #3e3d3f;
+    margin-left: 2px;
     color: white;
     text-decoration: none;
-    display: inline-block;
-    padding: 0.1em 0.9em;
+    padding: 0.1em 0.9em 0.3em;
 }
+a.button:hover {
+    background: #555;
+}
+a.button.fork,
+a.button.fork:hover {
+    background: #53a259;
+}
+
+
 
 a {
     color: #53a259;
@@ -133,6 +146,7 @@ p {
 
 .docblock, .compare, .split {
     clear: both;
+    position: relative;
 }
 .docblock {
     padding: 0 10px;

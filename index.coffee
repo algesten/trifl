@@ -15,8 +15,12 @@ html5 ->
                 h1 'trifl'
                 p 'a functional web client user interface library
                     with a unidirectional dataflow and a virtual dom.'
-            div class:'fork', ->
-                a href:'https://github.com/algesten/trifl', 'fork me on github'
+            div class:'buttons', ->
+                a class:'button', href:'https://github.com/algesten/trifl#installation', ->
+                    'installation'
+                a class:'button', href:'https://github.com/algesten/trifl#api', ->
+                    'api docs'
+                a class:'button fork', href:'https://github.com/algesten/trifl', 'fork me on github'
 
         div class:'main', ->
             div class:'container', ->
