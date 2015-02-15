@@ -12,6 +12,53 @@ There are a bunch of user interface libraries breaking new ground into
 virtual dom and unidirectional data flow, however they mostly follow a
 non-functional programming style. Trifl tries to put functions first.
 
+Installation
+------------
+
+### Installing with Bower
+
+```bash
+bower install -S trifl
+```
+
+This exposes the global object `trifl`.
+
+#### With coffeescript
+
+Use destructuring assignment to pick out the function wanted.
+
+```coffee
+{action, updated, handle, view, layout, region, route, path, exec, navigate} = trifl
+
+action 'dostuff', arg
+```
+
+#### With javascript
+
+Use the functions off the trifle object or declare them separate.
+
+```javascript
+trifle.action('dostuff', arg);
+
+// or
+
+var action = trifle.action;
+
+action('dostuff', arg);
+
+```
+
+### Installing with NPM
+
+```bash`
+npm install -S trifl
+```
+
+Check out the tutorial
+----------------------
+
+Check out [the tutorial][pages].
+
 Overview
 --------
 
@@ -31,6 +78,8 @@ changes.
 Trifl doesn't make components out of *dispatchers* and *controllers* –
 they are simple functions, and *models* are nowhere to be found –
 implement them any way you want.
+
+There's more theory in [the tutorial][pages].
 
 API
 ---
@@ -484,3 +533,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [tagg]: https://github.com/algesten/tagg
 [vdom]: https://github.com/Matt-Esch/virtual-dom
 [push]: https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history#The_pushState()_method
+[pages]: http://algesten.github.io/trifl/
