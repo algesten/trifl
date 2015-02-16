@@ -1,12 +1,15 @@
 {html5, head, meta, title, link, script, body, div, h1, h2, h3, p, ul,
-ol, li, img, figure, figcaption, i, pre, code, a} = require 'tagg'
+ol, li, img, figure, figcaption, i, b, pre, code, a} = require 'tagg'
 
 html5 ->
     head ->
         meta charset:'utf-8'
-        meta name:"viewport", content:"width=device-width,
-        initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        meta "http-equiv":"X-UA-Compatible", content:"IE=edge"
+
         title 'trifl - trifling functional views'
+
+        meta name:"viewport", content:"width=device-width, initial-scale=1.0"
+
         link rel:'stylesheet', href:'css/base.css'
         link rel:'stylesheet', href:'css/prism.css'
         link rel:'stylesheet', href:'css/styles.css'
@@ -17,6 +20,19 @@ html5 ->
                 h1 'trifl'
                 p 'a functional web client user interface library
                     with a unidirectional dataflow and a virtual dom.'
+                p 'Trifl provides some simple components to structure web applications.
+                There are ', (->b 'actions'), ' to aid a unidirectional data flow,
+                ', (->b ' views'), ' to visualize your model state as it changes
+                and ', (->b 'router'), ' to glue the url to actions and views.'
+                p 'Discuss ', (->a href:'https://gitter.im/algesten/trifl', 'trifl
+                on gitter'), ',
+                read the ', (->a href:'https://github.com/algesten/trifl#api', 'api
+                docs'), ',
+                review the ', (->a href:'https://github.com/algesten/trifl', 'code
+                on github'), ' and
+                report ', (->a href:'https://github.com/algesten/trifl/issues', 'issues on
+                github'), '.'
+
             div class:'buttons', ->
                 a class:'button', href:'https://github.com/algesten/trifl#installation', ->
                     'installation'
@@ -32,6 +48,10 @@ html5 ->
                         img src:'assets/trifl-flow.svg'
                         figcaption 'figure detailing the flow of a trifl application.'
 
+                    p 'Generally with trifl, it is encouraged to "think big", big actions,
+                    big model changes, big view updates. Trifl provides the tools to avoid
+                    micro managing model/dom updates.'
+
                     h2 'three parts', ->
                     p 'There are three parts to trifl:', ->
                         ul ->
@@ -44,13 +64,28 @@ html5 ->
                             url changes.'
 
                     h2 'actions'
-                    p 'Actions can be thought of as really bad events cause they can only
-                    have one listener: the handler. Other frameworks
-                    talk about "dispatcher" as a component, and whilst trifl doesn\'t
-                    have such an component, we encourage to think of action handlers as
-                    dispatcher code.'
-                    p 'Actions are triggered by input in the user interface or asynchronous
-                    server events such as updates and responses to ajax.'
+
+                    p 'Actions are triggered by input or asynchronous
+                    server events such as responses to ajax.'
+
+                    p 'Actions can be thought of as really bad events
+                    cause they can only have one listener: the
+                    handler. This is one part of "thinking big".
+                    Traditional events encourage micro state changes
+                    with multiple listeners scattered througout the
+                    code. In medium to large applications it quickly
+                    become very hard to get an overview of all things
+                    happening as a result of such an event.'
+
+                    p 'In trifl there is only one action handler per
+                    action, and, in line with unidirectional thinking,
+                    its only responsibility is to propagate the action
+                    to the model.'
+
+                    p 'Other frameworks talk about "dispatcher" as a
+                    component, and whilst trifl doesn\'t have an
+                    explicit such an component, we encourage to think
+                    of action handlers as dispatcher code.'
 
                 div class:'compare', ->
                     div class:'col col-6 mobile-full', ->
@@ -74,24 +109,33 @@ html5 ->
                           'action("selectarticle", "slugattack01");'
 
                 div class:'docblock', ->
-                    p 'Only one action can be triggered at a time. It is an error
-                    to dispatch another somewhere inside the handler (or model code) and
-                    doing so will result in an exception.'
-                    p 'There is however another class of actions called updates which
-                    are allowed. Updates are used to signal that a model has been updated
-                    and requires re-rendering in the views.'
+
+                    p 'Only one action can be triggered at a time. It
+                    is an error to dispatch another somewhere inside
+                    the handler (or model code executed by the
+                    handler) and doing so will result in an
+                    exception.'
+
+                    p 'There is however another class of actions
+                    called ', (->i 'updates'), ' that are
+                    allowed. Updates are used to signal that a model
+                    has been updated and requires re-rendering in the
+                    views.'
 
                     h3 'dispatchers and controllers'
-                    p 'Handlers come in two variants that work exactly the same, but are
-                    mentally separate to know what part of the code they belong in.'
+
+                    p 'Handlers come in two variants that work exactly
+                    the same, but are mentally separate to know what
+                    part of the code they belong in.'
 
                     ul ->
                         li 'action – ', (-> i 'dispatcher function'), ' (handler)'
                         li 'update – ', (-> i 'controller function'), ' (handler)'
 
-                    p 'Dispatchers are handlers that receive plain actions. Controllers
-                    work on the back of models marked as updated during the dispatch
-                    of an action.'
+                    p 'Dispatchers are handlers that receive plain
+                    actions. Controllers work on the back of models
+                    marked as updated during the dispatch of an
+                    action.'
 
                     figure ->
                         img src:'assets/trifl-action2view.svg'
@@ -114,7 +158,7 @@ html5 ->
                           '      # trigger action with the update\n'+
                           '      action "gotarticle", article \n' +
                           '    @state = "requesting"\n' +
-                          '    updated "articles"\n' +
+                          '    update "articles"\n' +
                           '}\n\n\n\n'
                     div class:'col col-6 mobile-full', ->
                         p 'Declare a controller function'
@@ -135,13 +179,29 @@ html5 ->
                           '      action("gotarticle", article);\n' +
                           '    });\n' +
                           '    this.state = "requesting";\n' +
-                          '    updated("articles");\n' +
+                          '    update("articles");\n' +
                           '  }\n' +
                           '};'
 
                 div class:'docblock', ->
+
                     h2 'views'
-                    p 'Views render a model state into something the user can see.'
+
+                    p 'Views render a model state into something the user can see.
+                    Trifl ships
+                    with ', (->a href:'https://github.com/algesten/tagg', 'tagg'), ', configured
+                    to deep hook
+                    into ', (->a href:'https://github.com/Matt-Esch/virtual-dom', 'virtual-dom'),
+                    '.'
+
+                    p 'In views we again "think big" and encourage to
+                    render large parts of the screen – entire models –
+                    at a time. The virtual dom will figure out the
+                    differences, and only make partial real dom
+                    changes.'
+
+
+
 
 
         script src:'js/prism.js'
