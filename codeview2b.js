@@ -1,0 +1,1 @@
+applayout.main(articleview);

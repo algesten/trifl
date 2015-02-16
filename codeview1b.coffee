@@ -1,0 +1,1 @@
+articleview model.articles

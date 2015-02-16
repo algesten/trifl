@@ -1,6 +1,9 @@
 {html5, head, meta, title, link, script, body, div, h1, h2, h3, p, ul,
 ol, li, img, figure, figcaption, i, b, pre, code, a} = require 'tagg'
 
+fs = require 'fs'
+read = (f) -> fs.readFileSync f, encoding:'utf8'
+
 html5 ->
     head ->
         meta charset:'utf-8'
@@ -17,13 +20,18 @@ html5 ->
 
         div class:'top', ->
             div class:'container', ->
+
                 h1 'trifl'
-                p 'a functional web client user interface library
-                    with a unidirectional dataflow and a virtual dom.'
-                p 'Trifl provides some simple components to structure web applications.
+
+                p 'a functional web client user interface library with
+                    a unidirectional dataflow and a virtual dom.'
+
+                p 'Trifl provides some simple ', (->i 'functions'), ' to structure
+                web applications.
                 There are ', (->b 'actions'), ' to aid a unidirectional data flow,
                 ', (->b ' views'), ' to visualize your model state as it changes
                 and ', (->b 'router'), ' to glue the url to actions and views.'
+
                 p 'Discuss ', (->a href:'https://gitter.im/algesten/trifl', 'trifl
                 on gitter'), ',
                 read the ', (->a href:'https://github.com/algesten/trifl#api', 'api
@@ -200,6 +208,82 @@ html5 ->
                     differences, and only make partial real dom
                     changes.'
 
+                    p 'Views are render-functions that are wrapped to
+                    provide the virtual-dom-goodness. Using the
+                    awesomeness of javascript, we set a property on
+                    the created function, ', (->i 'view.el'), '. This
+                    is the dom element the view function controls.'
+
+                    p 'Initially, before the view function has ever been
+                    invoked, this is a simple <div></div>, but the type
+                    can change on first function invokation.'
+
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Create a view function'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'codeview1.coffee'
+
+                        p 'Render it', ->
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'codeview1b.coffee'
+
+
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Create a view function'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'codeview1.js'
+
+                        p 'Render it', ->
+
+                        pre -> code class:'language-javascript', ->
+                            read 'codeview1b.js'
+
+
+                div class:'docblock', ->
+
+                    h3 'layouts'
+
+                    p 'Layouts are special views, they provide a means
+                    of organizing the dom into named "pigeon holes", called
+                    regions, that display other views.'
+
+                    figure ->
+                        img src:'assets/layout.svg'
+                        figcaption 'figure showing layout and regions.'
+
+                    p 'Layout functions typically don\'t take arguments and
+                    are always invoked upon creation.'
+
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Create a layout function'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'codeview2.coffee'
+
+                        p 'Put a view in a region'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'codeview2b.coffee'
+
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Create a layout function'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'codeview2.js'
+
+                        p 'Put a view in a region'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'codeview2b.js'
 
 
 

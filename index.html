@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>trifl - trifling functional views</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/prism.css"><link rel="stylesheet" href="css/styles.css"></head><body><div class="top"><div class="container"><h1>trifl</h1><p>a functional web client user interface library with a unidirectional dataflow and a virtual dom.</p><p>Trifl provides some simple components to structure web applications. There are <b>actions</b> to aid a unidirectional data flow,<b> views</b> to visualize your model state as it changes and <b>router</b> to glue the url to actions and views.</p><p>Discuss <a href="https://gitter.im/algesten/trifl">trifl on gitter</a>, read the <a href="https://github.com/algesten/trifl#api">api docs</a>, review the <a href="https://github.com/algesten/trifl">code on github</a> and report <a href="https://github.com/algesten/trifl/issues">issues on github</a>.</p></div><div class="buttons"><a class="button" href="https://github.com/algesten/trifl#installation">installation</a><a class="button" href="https://github.com/algesten/trifl#api">api docs</a><a class="button fork" href="https://github.com/algesten/trifl">fork me on github</a></div></div><div class="main"><div class="container"><div class="docblock"><figure><img src="assets/trifl-flow.svg"><figcaption>figure detailing the flow of a trifl application.</figcaption></figure><p>Generally with trifl, it is encouraged to "think big", big actions, big model changes, big view updates. Trifl provides the tools to avoid micro managing model/dom updates.</p><h2>three parts</h2><p>There are three parts to trifl:<ul><li><i>Actions</i> are helper functions to aid decoupling of application parts in a unidirectional manner.</li><li><i>Views</i> are render functions whose purpose are to make dom nodes reflect some model state.</li><li>The <i>router</i> is a utility for organising a url space into visible views and firing actions as a result of url changes.</li></ul></p><h2>actions</h2><p>Actions are triggered by input or asynchronous server events such as responses to ajax.</p><p>Actions can be thought of as really bad events cause they can only have one listener: the handler. This is one part of "thinking big". Traditional events encourage micro state changes with multiple listeners scattered througout the code. In medium to large applications it quickly become very hard to get an overview of all things happening as a result of such an event.</p><p>In trifl there is only one action handler per action, and, in line with unidirectional thinking, its only responsibility is to propagate the action to the model.</p><p>Other frameworks talk about "dispatcher" as a component, and whilst trifl doesn't have an explicit such an component, we encourage to think of action handlers as dispatcher code.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a dispatcher function</p><pre><code class="language-coffeescript">handler "selectarticle", (articleid) ->
+<html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>trifl - trifling functional views</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/prism.css"><link rel="stylesheet" href="css/styles.css"></head><body><div class="top"><div class="container"><h1>trifl</h1><p>a functional web client user interface library with a unidirectional dataflow and a virtual dom.</p><p>Trifl provides some simple <i>functions</i> to structure web applications. There are <b>actions</b> to aid a unidirectional data flow,<b> views</b> to visualize your model state as it changes and <b>router</b> to glue the url to actions and views.</p><p>Discuss <a href="https://gitter.im/algesten/trifl">trifl on gitter</a>, read the <a href="https://github.com/algesten/trifl#api">api docs</a>, review the <a href="https://github.com/algesten/trifl">code on github</a> and report <a href="https://github.com/algesten/trifl/issues">issues on github</a>.</p></div><div class="buttons"><a class="button" href="https://github.com/algesten/trifl#installation">installation</a><a class="button" href="https://github.com/algesten/trifl#api">api docs</a><a class="button fork" href="https://github.com/algesten/trifl">fork me on github</a></div></div><div class="main"><div class="container"><div class="docblock"><figure><img src="assets/trifl-flow.svg"><figcaption>figure detailing the flow of a trifl application.</figcaption></figure><p>Generally with trifl, it is encouraged to "think big", big actions, big model changes, big view updates. Trifl provides the tools to avoid micro managing model/dom updates.</p><h2>three parts</h2><p>There are three parts to trifl:<ul><li><i>Actions</i> are helper functions to aid decoupling of application parts in a unidirectional manner.</li><li><i>Views</i> are render functions whose purpose are to make dom nodes reflect some model state.</li><li>The <i>router</i> is a utility for organising a url space into visible views and firing actions as a result of url changes.</li></ul></p><h2>actions</h2><p>Actions are triggered by input or asynchronous server events such as responses to ajax.</p><p>Actions can be thought of as really bad events cause they can only have one listener: the handler. This is one part of "thinking big". Traditional events encourage micro state changes with multiple listeners scattered througout the code. In medium to large applications it quickly become very hard to get an overview of all things happening as a result of such an event.</p><p>In trifl there is only one action handler per action, and, in line with unidirectional thinking, its only responsibility is to propagate the action to the model.</p><p>Other frameworks talk about "dispatcher" as a component, and whilst trifl doesn't have an explicit such an component, we encourage to think of action handlers as dispatcher code.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a dispatcher function</p><pre><code class="language-coffeescript">handler "selectarticle", (articleid) ->
     # action updates the model
     model.articles.requestArticle(articleid)
 
@@ -38,4 +38,62 @@
     this.state = "requesting";
     update("articles");
   }
-};</code></pre></div></div><div class="docblock"><h2>views</h2><p>Views render a model state into something the user can see. Trifl ships with <a href="https://github.com/algesten/tagg">tagg</a>, configured to deep hook into <a href="https://github.com/Matt-Esch/virtual-dom">virtual-dom</a>.</p><p>In views we again "think big" and encourage to render large parts of the screen – entire models – at a time. The virtual dom will figure out the differences, and only make partial real dom changes.</p></div></div></div><script src="js/prism.js"></script><div class="footer"><div class="container"><p class="copyright">Copyright © 2015 Martin Algesten</p></div></div></body></html>
+};</code></pre></div></div><div class="docblock"><h2>views</h2><p>Views render a model state into something the user can see. Trifl ships with <a href="https://github.com/algesten/tagg">tagg</a>, configured to deep hook into <a href="https://github.com/Matt-Esch/virtual-dom">virtual-dom</a>.</p><p>In views we again "think big" and encourage to render large parts of the screen – entire models – at a time. The virtual dom will figure out the differences, and only make partial real dom changes.</p><p>Views are render-functions that are wrapped to provide the virtual-dom-goodness. Using the awesomeness of javascript, we set a property on the created function, <i>view.el</i>. This is the dom element the view function controls.</p><p>Initially, before the view function has ever been invoked, this is a simple &lt;div>&lt;/div>, but the type can change on first function invokation.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Create a view function</p><pre><code class="language-coffeescript">articleview = view (articles) ->
+  ul ->
+    articles.forEach (article) ->
+      li article.title, ->
+        span class:'desc', article.description
+
+# articleview.el is now a DOM node.
+
+
+
+
+
+</code></pre><p>Render it</p><pre><code class="language-coffeescript">articleview model.articles
+</code></pre></div><div class="col col-6 mobile-full"><p>Create a view function</p><pre><code class="language-javascript">var articleview = view(function(articles) {
+  ul(function() {
+    articles.forEach(function(article) {
+      li(article.title, function() {
+        span({className:'desc'},
+          article.description);
+      });
+    });
+  });
+});
+
+// articleview.el is now DOM node.
+</code></pre><p>Render it</p><pre><code class="language-javascript">articleview(model.articles);
+</code></pre></div></div><div class="docblock"><h3>layouts</h3><p>Layouts are special views, they provide a means of organizing the dom into named "pigeon holes", called regions, that display other views.</p><figure><img src="assets/layout.svg"><figcaption>figure showing layout and regions.</figcaption></figure><p>Layout functions typically don't take arguments and are always invoked upon creation.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Create a layout function</p><pre><code class="language-coffeescript">applayout = layout ->
+  div ->
+    div region('topnav')
+    div region('leftnav')
+    div region('main')
+
+# applayout.el is now the
+# outer div
+
+# applayout.topnav,
+# applayout.leftnav
+# applayout.main are region
+# functions
+
+
+</code></pre><p>Put a view in a region</p><pre><code class="language-coffeescript">applayout.main articleview
+</code></pre></div><div class="col col-6 mobile-full"><p>Create a layout function</p><pre><code class="language-javascript">applayout = layout(function() {
+  div(function() {
+    div(region('topnav'));
+    div(region('lefnav'));
+    div(region('main'));
+  });
+});
+
+// applayout.el is now the
+// outer div
+
+// applayout.topnav,
+// applayout.leftnav
+// applayout.main are region
+// functions
+</code></pre><p>Put a view in a region</p><pre><code class="language-javascript">applayout.main(articleview);
+</code></pre></div></div></div></div><script src="js/prism.js"></script><div class="footer"><div class="container"><p class="copyright">Copyright © 2015 Martin Algesten</p></div></div></body></html>
