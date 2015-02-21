@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>trifl - trifling functional views</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/prism.css"><link rel="stylesheet" href="css/styles.css"></head><body><div class="top"><div class="container"><h1>trifl</h1><p>a functional web client user interface library with a unidirectional dataflow and a virtual dom.</p><p>Trifl provides some simple <i>functions</i> to structure web applications. There are <b>actions</b> to aid a unidirectional data flow,<b> views</b> to visualize your model state as it changes and <b>router</b> to glue the url to actions and views.</p><p>Discuss <a href="https://gitter.im/algesten/trifl">trifl on gitter</a>, read the <a href="https://github.com/algesten/trifl#api">api docs</a>, review the <a href="https://github.com/algesten/trifl">code on github</a> and report <a href="https://github.com/algesten/trifl/issues">issues on github</a>.</p></div><div class="buttons"><a class="button" href="https://github.com/algesten/trifl#installation">installation</a><a class="button" href="https://github.com/algesten/trifl#api">api docs</a><a class="button fork" href="https://github.com/algesten/trifl">fork me on github</a></div></div><div class="main"><div class="container"><div class="docblock"><figure><img src="assets/trifl-flow.svg"><figcaption>figure detailing the flow of a trifl application.</figcaption></figure><p>Generally with trifl, it is encouraged to "think big", big actions, big model changes, big view updates. Trifl provides the tools to avoid micro managing model/dom updates.</p><h2>three parts</h2><p>There are three parts to trifl:<ul><li><i>Actions</i> are helper functions to aid decoupling of application parts in a unidirectional manner.</li><li><i>Views</i> are render functions whose purpose are to make dom nodes reflect some model state.</li><li>The <i>router</i> is a utility for organising a url space into visible views and firing actions as a result of url changes.</li></ul></p><h2>actions</h2><p>Actions are triggered by input or asynchronous server events such as responses to ajax.</p><p>Actions can be thought of as really bad events cause they can only have one listener: the handler. This is one part of "thinking big". Traditional events encourage micro state changes with multiple listeners scattered througout the code. In medium to large applications it quickly become very hard to get an overview of all things happening as a result of such an event.</p><p>In trifl there is only one action handler per action, and, in line with unidirectional thinking, its only responsibility is to propagate the action to the model.</p><p>Other frameworks talk about "dispatcher" as a component, and whilst trifl doesn't have an explicit such an component, we encourage to think of action handlers as dispatcher code.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a dispatcher function</p><pre><code class="language-coffeescript">handler "selectarticle", (articleid) ->
+<html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>trifl - trifling functional views</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/prism.css"><link rel="stylesheet" href="css/styles.css"></head><body><div class="top"><div class="container"><h1>trifl</h1><p>a functional web client user interface library with a unidirectional dataflow and a virtual dom.</p><p>Trifl provides some simple <i>functions</i> to structure web applications. There are <b>actions</b> to aid a unidirectional data flow,<b> views</b> to visualize your model state as it changes and <b>router</b> to glue the url to actions and views.</p><p>Discuss <a href="https://gitter.im/algesten/trifl">trifl on gitter</a>, read the <a href="https://github.com/algesten/trifl#api">api docs</a>, review the <a href="https://github.com/algesten/trifl">code on github</a> and report <a href="https://github.com/algesten/trifl/issues">issues on github</a>.</p></div><div class="buttons"><a class="button" href="https://github.com/algesten/trifl#installation">installation</a><a class="button" href="https://github.com/algesten/trifl#api">api docs</a><a class="button fork" href="https://github.com/algesten/trifl">fork me on github</a></div></div><div class="main"><div class="container"><div class="docblock"><figure><img src="assets/trifl-flow.svg"><figcaption>figure detailing the flow of a trifl application.</figcaption></figure><h3>no async</h3><p>Trifl does not have callback or asynchronous methods. Everything from view rendering to routing is done synchronously.</p><h3>think big</h3><p>Generally with trifl, it is encouraged to "think big", big actions, big model changes, big view updates. Trifl provides the tools to avoid micro managing model/dom updates.</p><h2>three parts</h2><p>There are three parts to trifl:<ul><li><i>Actions</i> are helper functions to aid decoupling of application parts in a unidirectional manner.</li><li><i>Views</i> are render functions whose purpose are to make dom nodes reflect some model state.</li><li>The <i>router</i> is a utility for organising a url space into visible views and firing actions as a result of url changes.</li></ul></p><h2>actions</h2><p>Actions are triggered by input or asynchronous server events such as responses to ajax.</p><p>Actions can be thought of as really bad events cause they can only have one listener: the handler. This is one part of "thinking big". Traditional events encourage micro state changes with multiple listeners scattered througout the code. In medium to large applications it quickly become very hard to get an overview of all things happening as a result of such an event.</p><p>In trifl there is only one action handler per action, and, in line with unidirectional thinking, its only responsibility is to propagate the action to the model.</p><p>Other frameworks talk about "dispatcher" as a component, and whilst trifl doesn't have an explicit such an component, we encourage to think of action handlers as dispatcher code.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a dispatcher function</p><pre><code class="language-coffeescript">handler "selectarticle", (articleid) ->
     # action updates the model
     model.articles.requestArticle(articleid)
 
@@ -96,4 +96,96 @@
 // applayout.main are region
 // functions
 </code></pre><p>Put a view in a region</p><pre><code class="language-javascript">applayout.main(articleview);
-</code></pre></div></div></div></div><script src="js/prism.js"></script><div class="footer"><div class="container"><p class="copyright">Copyright © 2015 Martin Algesten</p></div></div></body></html>
+</code></pre></div></div><div class="docblock"><h2>router</h2><p>The router turns the url space into executable code. There is only one route function which use nested path statements to "consume" the current url from left to right.</p><p>The route is always executed straight away when set.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare the route function</p><pre><code class="language-coffeescript">route ->
+
+    # starting from the left,
+    # we consume "/contact"
+    path '/contact', ->
+
+        # if current url starts
+        # "/contact", this block
+        # is executed
+
+        # put contact view in
+        # main region
+        appview.main contactview
+
+
+</code></pre><p>Nested path functions</p><pre><code class="language-coffeescript">route ->
+
+    path '/aboutus', ->
+
+        appview.main aboutusview
+
+        path '/history', ->
+
+            # we only execute
+            # this block if
+            # current url starts
+            # /aboutus/history
+
+
+
+
+</code></pre></div><div class="col col-6 mobile-full"><p>Declare the route function</p><pre><code class="language-javascript">route(function() {
+
+    // starting from the left,
+    // we consume "/contact"
+    path('/contact', function() {
+
+        // if current url starts
+        // "/contact", this block
+        // is executed
+
+        // put contact view in
+        // main region
+        appview.main(contactview);
+    });
+});
+</code></pre><p>Nested path functions</p><pre><code class="language-javascript">route(function() {
+
+    path('/aboutus', function() {
+
+        appview.main(aboutusview);
+
+        path('/history', function() {
+
+            // we only execute
+            // this block if
+            // current url starts
+            // /aboutus/history
+
+        });
+    });
+});
+</code></pre></div></div><div class="docblock"><h3>exec</h3><p>To do something useful with the remainder, the not consumed part of the url, we use exec. This executes the given function with two arguments: the remainder and the query object.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Execute from the current context.</p><pre><code class="language-coffeescript"># current url is /news/panda?format=json
+
+route ->
+
+    path '/news/', ->
+
+        exec (remainder, query) ->
+
+            # remainder is "panda"
+            # query is {format:'json'}
+
+
+
+
+</code></pre></div><div class="col col-6 mobile-full"><p>Execute from the current context.</p><pre><code class="language-javascript">// current url is /news/panda?format=json
+
+route(function() {
+
+    path('/news/', function() {
+
+        exec(function(remainder, query) {
+
+            // remainder is "panda"
+            // query is {format:'json'}
+
+        });
+    });
+});
+</code></pre></div></div><div class="docblock"><h3>navigate</h3><p>navigate does a <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history#The_pushState()_method">pushState</a> change of the url. This triggers the route function if the new url differs from the previous.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Change the url.</p><pre><code class="language-coffeescript">navigate '/some/where?q=apples'
+</code></pre></div><div class="col col-6 mobile-full"><p>Change the url.</p><pre><code class="language-javascript">navigate('/some/where?q=apples');
+</code></pre></div></div><div class="docblock endbit"><p><i>go forth, and trifle...</i></p></div></div></div><script src="js/prism.js"></script><div class="footer"><div class="container"><p class="copyright">Copyright © 2015 Martin Algesten</p></div></div></body></html>

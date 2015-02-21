@@ -204,3 +204,8 @@ code[class*="language-"], pre[class*="language-"] {
     font-size: 0.8em;
     float: right;
 }
+
+.endbit {
+    margin-top: 60px;
+    text-align: center;
+}

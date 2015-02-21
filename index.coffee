@@ -56,6 +56,14 @@ html5 ->
                         img src:'assets/trifl-flow.svg'
                         figcaption 'figure detailing the flow of a trifl application.'
 
+                    h3 'no async'
+
+                    p 'Trifl does not have callback or asynchronous
+                    methods. Everything from view rendering to routing
+                    is done synchronously.'
+
+                    h3 'think big'
+
                     p 'Generally with trifl, it is encouraged to "think big", big actions,
                     big model changes, big view updates. Trifl provides the tools to avoid
                     micro managing model/dom updates.'
@@ -285,8 +293,97 @@ html5 ->
                         pre -> code class:'language-javascript', ->
                             read 'codeview2b.js'
 
+                div class:'docblock', ->
+
+                    h2 'router'
+
+                    p 'The router turns the url space into executable
+                    code. There is only one route function which use
+                    nested path statements to "consume" the current
+                    url from left to right.'
+
+                    p 'The route is always executed straight away when
+                    set.'
 
 
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Declare the route function'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'coderoute1.coffee'
+
+                        p 'Nested path functions'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'coderoute1b.coffee'
+
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Declare the route function'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'coderoute1.js'
+
+                        p 'Nested path functions'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'coderoute1b.js'
+
+                div class:'docblock', ->
+
+                    h3 'exec'
+
+                    p 'To do something useful with the remainder, the
+                    not consumed part of the url, we use exec. This
+                    executes the given function with two arguments:
+                    the remainder and the query object.'
+
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Execute from the current context.'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'coderoute2.coffee'
+
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Execute from the current context.'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'coderoute2.js'
+
+
+                div class:'docblock', ->
+
+                    h3 'navigate'
+
+                    p 'navigate does a ', (->
+                        a href:'https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history#The_pushState()_method', 'pushState'), ' change
+                    of the url. This triggers the route function if the new
+                    url differs from the previous.'
+
+                div class:'compare', ->
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Change the url.'
+
+                        pre -> code class:'language-coffeescript', ->
+                            read 'coderoute4.coffee'
+
+                    div class:'col col-6 mobile-full', ->
+
+                        p 'Change the url.'
+
+                        pre -> code class:'language-javascript', ->
+                            read 'coderoute4.js'
+
+
+                div class:'docblock endbit', ->
+
+                    p -> i 'go forth, and trifle...'
 
         script src:'js/prism.js'
         div class:'footer', ->
