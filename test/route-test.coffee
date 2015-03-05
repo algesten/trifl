@@ -239,3 +239,21 @@ describe 'route', ->
             eql e1.args[0], ['re', foo:'bar']
             eql e2.callCount, 1
             eql e2.args[0], ['em/here', foo:'bar']
+
+        describe 'lazyview', ->
+
+            it 'suspends layout during route function', ->
+                r = null
+                l = layout -> div -> div region('reg')
+                v1 = view -> div()
+                v2 = view -> div()
+                spy l, 'reg'
+                spy (n = l.el.childNodes[0]), 'appendChild'
+                route -> path '/item', ->
+                    l.reg v1
+                    path '/is', r = spy ->
+                        l.reg v2
+                router._run '/item/is/there', '?foo=bar'
+                eql r.callCount, 1
+                eql l.reg.callCount, 2
+                eql n.appendChild.callCount, 1
