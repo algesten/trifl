@@ -74,14 +74,14 @@ describe 'route', ->
                 eql router._check(), false
                 eql router._run.callCount, 0
 
-            it 'compares pathname/search and executes _run if pathname differs', ->
+            it 'compares pathname/search and invokes _run if pathname differs', ->
                 window.location.pathname = '/another/path'
                 window.location.search   = '?panda=true'
                 eql router._check(), true
                 eql router._run.callCount, 1
                 eql router._run.args[0], ['/another/path', '?panda=true']
 
-            it 'compares pathname/search and executes _run if search differs', ->
+            it 'compares pathname/search and invokes _run if search differs', ->
                 window.location.pathname = '/a/path'
                 window.location.search   = '?kitten=true'
                 eql router._check(), true
@@ -168,7 +168,7 @@ describe 'route', ->
             eql r.callCount, 0
             eql e.callCount, 0
 
-        it 'execute route straight away', ->
+        it 'invoke route straight away', ->
             route r = spy()
             eql r.callCount, 1
 
@@ -190,7 +190,7 @@ describe 'route', ->
                 eql r, 42
             eql s.callCount, 1
 
-        it 'executes the route set', ->
+        it 'invokes the route set', ->
             r = e = null
             window.location =
                 pathname:'/a/path'
@@ -202,7 +202,7 @@ describe 'route', ->
             eql e.callCount, 1
             eql e.args[0], ['/a/path', foo:'bar']
 
-        it 'executes to the end and no more', ->
+        it 'invokes to the end and no more', ->
             s = r1 = r2 = e = null
             # default is "/some/path"
             route s = spy ->
