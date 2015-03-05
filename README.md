@@ -486,6 +486,9 @@ Navigates to the location `l` using [pushState][push] and checks to
 see if the url changed in which case the [route function](#route) is
 executed.
 
+This function is lazy when used inside [route](#route), only the last
+location will be used when the route function finishes.
+
 `:: string -> undefined`
 
 arg | desc
