@@ -6,7 +6,7 @@ route ->
 
         path '/history', ->
 
-            # we only execute
+            # we only invoke
             # this block if
             # current url starts
             # /aboutus/history

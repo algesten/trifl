@@ -128,7 +128,7 @@ html5 ->
 
                     p 'Only one action can be triggered at a time. It
                     is an error to dispatch another somewhere inside
-                    the handler (or model code executed by the
+                    the handler (or model code invoked by the
                     handler) and doing so will result in an
                     exception.'
 
@@ -297,12 +297,12 @@ html5 ->
 
                     h2 'router'
 
-                    p 'The router turns the url space into executable
-                    code. There is only one route function which use
-                    nested path statements to "consume" the current
-                    url from left to right.'
+                    p 'The router turns the url space into code. There
+                    is only one route function which use nested path
+                    statements to "consume" the current url from left
+                    to right.'
 
-                    p 'The route is always executed straight away when
+                    p 'The route is always run straight away when
                     set.'
 
 

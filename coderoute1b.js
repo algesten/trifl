@@ -6,7 +6,7 @@ route(function() {
 
         path('/history', function() {
 
-            // we only execute
+            // we only invoke
             // this block if
             // current url starts
             // /aboutus/history

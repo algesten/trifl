@@ -6,7 +6,7 @@
 </code></pre><p>Trigger an action</p><pre><code class="language-coffeescript">action "selectarticle", "slugattack01"</code></pre></div><div class="col col-6 mobile-full"><p>Declare a dispatcher function</p><pre><code class="language-javascript">handler("selectarticle", function(articleid) {
     // action updates the model
     model.articles.requestArticle(articleid);
-});</code></pre><p>Trigger an action</p><pre><code class="language-javascript">action("selectarticle", "slugattack01");</code></pre></div></div><div class="docblock"><p>Only one action can be triggered at a time. It is an error to dispatch another somewhere inside the handler (or model code executed by the handler) and doing so will result in an exception.</p><p>There is however another class of actions called <i>updates</i> that are allowed. Updates are used to signal that a model has been updated and requires re-rendering in the views.</p><h3>dispatchers and controllers</h3><p>Handlers come in two variants that work exactly the same, but are mentally separate to know what part of the code they belong in.</p><ul><li>action – <i>dispatcher function</i> (handler)</li><li>update – <i>controller function</i> (handler)</li></ul><p>Dispatchers are handlers that receive plain actions. Controllers work on the back of models marked as updated during the dispatch of an action.</p><figure><img src="assets/trifl-action2view.svg"><figcaption>figure showing action → module updates → view updates.</figcaption></figure></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a controller function</p><pre><code class="language-coffeescript">handler "update:articles", ->
+});</code></pre><p>Trigger an action</p><pre><code class="language-javascript">action("selectarticle", "slugattack01");</code></pre></div></div><div class="docblock"><p>Only one action can be triggered at a time. It is an error to dispatch another somewhere inside the handler (or model code invoked by the handler) and doing so will result in an exception.</p><p>There is however another class of actions called <i>updates</i> that are allowed. Updates are used to signal that a model has been updated and requires re-rendering in the views.</p><h3>dispatchers and controllers</h3><p>Handlers come in two variants that work exactly the same, but are mentally separate to know what part of the code they belong in.</p><ul><li>action – <i>dispatcher function</i> (handler)</li><li>update – <i>controller function</i> (handler)</li></ul><p>Dispatchers are handlers that receive plain actions. Controllers work on the back of models marked as updated during the dispatch of an action.</p><figure><img src="assets/trifl-action2view.svg"><figcaption>figure showing action → module updates → view updates.</figcaption></figure></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare a controller function</p><pre><code class="language-coffeescript">handler "update:articles", ->
     # rerender views
     views.articleCount model.articles
     views.articleView model.articles
@@ -96,7 +96,7 @@
 // applayout.main are region
 // functions
 </code></pre><p>Put a view in a region</p><pre><code class="language-javascript">applayout.main(articleview);
-</code></pre></div></div><div class="docblock"><h2>router</h2><p>The router turns the url space into executable code. There is only one route function which use nested path statements to "consume" the current url from left to right.</p><p>The route is always executed straight away when set.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare the route function</p><pre><code class="language-coffeescript">route ->
+</code></pre></div></div><div class="docblock"><h2>router</h2><p>The router turns the url space into code. There is only one route function which use nested path statements to "consume" the current url from left to right.</p><p>The route is always run straight away when set.</p></div><div class="compare"><div class="col col-6 mobile-full"><p>Declare the route function</p><pre><code class="language-coffeescript">route ->
 
     # starting from the left,
     # we consume "/contact"
@@ -104,7 +104,7 @@
 
         # if current url starts
         # "/contact", this block
-        # is executed
+        # is invoked
 
         # put contact view in
         # main region
@@ -119,7 +119,7 @@
 
         path '/history', ->
 
-            # we only execute
+            # we only invoke
             # this block if
             # current url starts
             # /aboutus/history
@@ -135,7 +135,7 @@
 
         // if current url starts
         // "/contact", this block
-        // is executed
+        // is invoked
 
         // put contact view in
         // main region
@@ -150,7 +150,7 @@
 
         path('/history', function() {
 
-            // we only execute
+            // we only invoke
             // this block if
             // current url starts
             // /aboutus/history

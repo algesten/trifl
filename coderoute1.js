@@ -6,7 +6,7 @@ route(function() {
 
         // if current url starts
         // "/contact", this block
-        // is executed
+        // is invoked
 
         // put contact view in
         // main region
