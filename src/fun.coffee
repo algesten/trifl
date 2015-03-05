@@ -25,4 +25,14 @@ class OrderedMap
         @map[k] = v
     get: (k) -> @map[k]
 
-module.exports = {startswith, indexof, select, concat, mixin, OrderedMap}
+
+expose = (exp, guard) -> (obj, funs...) ->
+    if funs?.length
+        obj[k] = exp[k] for k in funs
+    else unless obj[guard]
+        obj[k] = v for k, v of exp when k.indexOf("_") != 0
+        obj[guard] = true
+    exp
+
+
+module.exports = {startswith, indexof, select, concat, mixin, OrderedMap, expose}

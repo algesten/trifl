@@ -33,6 +33,20 @@ Use destructuring assignment to pick out the functions wanted.
 action 'dostuff', arg
 ```
 
+Install all functions in global scope.
+
+```coffee
+trifl.expose window        # All trifl functions are now in window.
+trifl.tagg.expose window   # Tons of functions. Use at own risk!
+```
+
+Pick functions to install in global scope.
+
+```coffee
+trifl.expose window, 'handler', 'action'
+trifl.tagg.expose window, 'div', 'p'
+```
+
 #### With javascript
 
 Use the functions off the `trifl` object or declare them separate.
@@ -55,6 +69,20 @@ var navigate = trifl.navigate;
 
 action('dostuff', arg);
 
+```
+
+Install all functions in global scope.
+
+```javascript
+trifl.expose(window);        // All trifl functions are now in window.
+trifl.tagg.expose(window);   // Tons of functions. Use at own risk!
+```
+
+Pick functions to install in global scope.
+
+```javascript
+trifl.expose(window, 'handler', 'action');
+trifl.tagg.expose(window, 'div', 'p');
 ```
 
 ### Installing with NPM
