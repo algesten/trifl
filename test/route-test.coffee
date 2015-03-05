@@ -1,6 +1,10 @@
+{div} = require 'tagg'
+{layout, region, view} = require '../src/view'
+
 describe 'route', ->
 
-    query = router = reinit = route = path = exec = navigate = _window = null
+    query = router = reinit = route = path = exec = navigate =
+    _lazynavigate = _window = null
 
     beforeEach ->
         global.__TEST_ROUTER = true
@@ -14,7 +18,7 @@ describe 'route', ->
                 pushState: spy ->
         {query, reinit} = require '../src/route'
         router = reinit?()
-        {route, path, exec, navigate} = router
+        {route, path, exec, navigate, _lazynavigate} = router
 
     afterEach ->
         global.window = _window
@@ -109,7 +113,6 @@ describe 'route', ->
     describe 'navigate', ->
 
         beforeEach ->
-            router._consume = spy ->
             spy router, '_check'
 
         it 'window.history.pushState it', ->
@@ -124,6 +127,38 @@ describe 'route', ->
         it 'returns undefined', ->
             r = navigate '/a',
             eql r, undefined
+
+    describe '_lazynavigate', ->
+
+        describe 'suspends navigation and', ->
+
+            it 'does nothing unless a navigate while suspended', ->
+                _lazynavigate true
+                _lazynavigate false
+                eql window.history.pushState.callCount, 0
+
+            it 'defers the navigation until not suspended', ->
+                _lazynavigate true
+                navigate '/foo'
+                eql window.history.pushState.callCount, 0
+                _lazynavigate false
+                eql window.history.pushState.callCount, 1
+                eql window.history.pushState.args[0], [{}, '', '/foo']
+
+            it 'uses the last navigate', ->
+                _lazynavigate true
+                navigate '/foo'
+                navigate '/bar'
+                eql window.history.pushState.callCount, 0
+                _lazynavigate false
+                eql window.history.pushState.callCount, 1
+                eql window.history.pushState.args[0], [{}, '', '/bar']
+
+            it 'ignores empty navigate', ->
+                _lazynavigate true
+                navigate ''
+                _lazynavigate false
+                eql window.history.pushState.callCount, 0
 
     describe 'route/path/exec', ->
 
@@ -257,3 +292,16 @@ describe 'route', ->
                 eql r.callCount, 1
                 eql l.reg.callCount, 2
                 eql n.appendChild.callCount, 1
+
+        describe 'lazynavigate', ->
+
+            it 'suspends navigate during route function', ->
+                r = null
+                route -> path '/item', ->
+                    navigate '/foo'
+                    path '/is', r = spy ->
+                        navigate '/bar'
+                router._run '/item/is/there'
+                eql r.callCount, 1
+                eql window.history.pushState.callCount, 1
+                eql window.history.pushState.args[0], [{}, '', '/bar']

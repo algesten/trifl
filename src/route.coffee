@@ -46,15 +46,28 @@ class Router
         @loc.search   = search
         q = query if search[0] == '?' then search.substring(1) else search
         try
+            @_lazynavigate true
             _lazylayout true
             @_consume pathname, 0, q, @_route
         finally
+            @_lazynavigate false
             _lazylayout false
 
     navigate: (url) =>
-        @win.history.pushState {}, '', url
-        @_check()
+        if @_lazynav
+            @_lazynav = url if url
+        else
+            @win.history.pushState {}, '', url
+            @_check()
         return undefined
+
+    _lazynavigate: (suspend) =>
+        if suspend
+            @_lazynav = '__NOT'
+        else
+            url = @_lazynav
+            delete @_lazynav
+            @navigate url unless url == '__NOT'
 
     route: (f)    =>
         @_route = f
@@ -73,7 +86,8 @@ do init = ->
     `router = new Router(window)`
 
 module.exports = {
-    route:router.route, path:router.path, exec:router.exec, navigate:router.navigate
+    route:router.route, path:router.path, exec:router.exec, navigate:router.navigate,
+    _lazynavigate:router._lazynavigate
 }
 
 # expose router/reinit for tests
