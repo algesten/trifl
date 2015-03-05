@@ -55,6 +55,8 @@ describe 'route', ->
             '%20a=b':  {' a':'b'}
             '&%20a=b': {' a':'b'}
             '&%20a=b&':{' a':'b'}
+            'a=1&a=2': {a:['1','2']}
+            'a=&a=1':  {a:['','1']}
         for k, v of tests
             do (k, v) ->
                 it "returns #{JSON.stringify(v)} for '#{k}'", -> eql query(k), v

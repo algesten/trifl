@@ -12,7 +12,14 @@ query = (s, ret = {}) ->
         query s.substring(1), ret
     else
         [m, key, val] = s.match(/([^&=]+)=?([^&]*)/) || ['']
-        ret[decode(key)] = decode(val) if key
+        if key
+            dkey = decode key
+            dval = decode val
+            if (prev = ret[dkey])?
+                arr = if Array.isArray(prev) then prev else ret[dkey] = [prev]
+                arr.push decode(val)
+            else
+                ret[dkey] = dval
         query s.substring(m.length + 1), ret
 
 # encapsulates the router functions
