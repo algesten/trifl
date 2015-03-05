@@ -439,10 +439,11 @@ route ->
         appview.main aboutusview                  # show aboutus view in main region
 ```
 
-Notice that [region functions](#region-functions) are lazy inside
-`route`, which means it is fine to call `appview.main` many
-times. Only the last call to `appview.main` will be run when the route
-function finishes.
+Notice that [region functions](#region-functions) and
+[navigate](#navigate) are lazy inside `route`, which means it is fine
+to call `appview.main` many times. Only the last call to
+`appview.main` will be run when the route function finishes. The same
+goes for `navigate`, only the last `navigate` will be used.
 
 #### path
 
