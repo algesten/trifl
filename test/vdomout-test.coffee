@@ -50,3 +50,62 @@ describe 'VDOMOut', ->
         eqlvt vt.children[1], 'p', 1, attributes:{}
         eql vt.children[1].children[0].text, 'nice pandas'
         eqlvt vt.children[2], 'img', 0, attributes:src:'/panda.jpg'
+
+    it 'treats data-* attributes as DataHook', ->
+        data = {}
+        data['data-test'] = 'foo42'
+        vt = capture out, -> div data
+        h = vt.properties['data-test']
+        assert.ok h instanceof VDOMOut.DataHook
+
+    it 'treats on* attributes as EventHook', ->
+        vt = capture out, -> div onclick: ->
+        h = vt.properties['onclick']
+        assert.ok h instanceof VDOMOut.EventHook
+
+    describe 'DataHook', ->
+
+        h = null
+
+        beforeEach ->
+            h = new VDOMOut.DataHook('panda')
+
+        describe 'hook', ->
+
+            it 'does setAttribute and node.dataset[camel]', ->
+                node = setAttribute: spy()
+                h.hook node, 'data-white-black-bear'
+                eql node.setAttribute.args[0], ['data-white-black-bear', 'panda']
+                eql node.dataset, whiteBlackBear:'panda'
+
+        describe 'unhook', ->
+
+            it 'does removeAttribute and delete node.dataset[camel]', ->
+                node =
+                    removeAttribute: spy()
+                    dataset:whiteBlackBear:'panda'
+                h.unhook node, 'data-white-black-bear'
+                eql node.removeAttribute.args[0], ['data-white-black-bear']
+                eql node.dataset, {}
+
+    describe 'EventHook', ->
+
+        h = null
+        handler = ->
+
+        beforeEach ->
+            h = new VDOMOut.EventHook(handler)
+
+        describe 'hook', ->
+
+            it 'does addEventListener with the event name', ->
+                node = addEventListener: spy()
+                h.hook node, 'onclick'
+                eql node.addEventListener.args[0], ['click', handler]
+
+        describe 'unhook', ->
+
+            it 'does removeEventListener with the event name', ->
+                node = removeEventListener: spy()
+                h.unhook node, 'onclick'
+                eql node.removeEventListener.args[0], ['click', handler]

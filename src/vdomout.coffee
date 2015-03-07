@@ -1,6 +1,9 @@
 VNode = require 'virtual-dom/vnode/vnode'
 VText = require 'virtual-dom/vnode/vtext'
 
+camelize = (n) ->
+    n.replace /-(\w)/g, (_,c) -> c.toUpperCase()
+
 module.exports = class VDOMOut
 
     constructor: ->
@@ -51,9 +54,10 @@ prepareProps = (inp) ->
     # virtual-dom needs all other attributes in a special map.
     attrs = props.attributes = {}
     for k, v of inp
-        isData = k[0...5] == 'data-'
-        if isData
-            props[k] = DataHook(v)
+        if k.length > 5 and k[0...5] == 'data-'
+            props[k] = new DataHook(v)
+        else k.length > 2 and if k[0...2] == 'on'
+            props[k] = new EventHook(v)
         else
             (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
     if inp.class
@@ -63,9 +67,8 @@ prepareProps = (inp) ->
     props
 
 # hook for dealing with data-* attributes
-class DataHook
+VDOMOut.DataHook = class DataHook
     constructor: (@value) ->
-        return new DataHook(@value) unless this instanceof DataHook
     hook: (node, name) ->
         node.setAttribute name, @value
         node.dataset = {} unless node.dataset # for jsdom
@@ -74,5 +77,12 @@ class DataHook
         node.removeAttribute name
         delete node.dataset[camelize(name[5..])]
 
-camelize = (n) ->
-    n.replace /-(\w)/g, (_,c) -> c.toUpperCase()
+# hook for attaching event listeners
+VDOMOut.EventHook = class EventHook
+    constructor: (@handler) ->
+    hook: (node, name) ->
+        event = name[2..]
+        node.addEventListener event, @handler
+    unhook: (node, name) ->
+        event = name[2..]
+        node.removeEventListener event, @handler
