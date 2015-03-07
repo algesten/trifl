@@ -9,7 +9,7 @@ query = (s, ret = {}) ->
     unless s # null, undefined, false, ''
         ret
     else if s[0] == '&'
-        query s.substring(1), ret
+        query s[1..], ret
     else
         [m, key, val] = s.match(/([^&=]+)=?([^&]*)/) || ['']
         if key
@@ -51,7 +51,7 @@ class Router
     _run: (pathname = '/', search = '') ->
         @loc.pathname = pathname
         @loc.search   = search
-        q = query if search[0] == '?' then search.substring(1) else search
+        q = query if search[0] == '?' then search[1..] else search
         try
             @_lazynavigate true
             _lazylayout true

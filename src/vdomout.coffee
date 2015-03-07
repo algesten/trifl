@@ -69,10 +69,10 @@ class DataHook
     hook: (node, name) ->
         node.setAttribute name, @value
         node.dataset = {} unless node.dataset # for jsdom
-        node.dataset[camelize(name.substring(5))] = @value
+        node.dataset[camelize(name[5..])] = @value
     unhook: (node, name) ->
         node.removeAttribute name
-        delete node.dataset[camelize(name.substring(5))]
+        delete node.dataset[camelize(name[5..])]
 
 camelize = (n) ->
     n.replace /-(\w)/g, (_,c) -> c.toUpperCase()

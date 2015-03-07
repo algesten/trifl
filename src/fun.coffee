@@ -10,8 +10,8 @@ select = (node, sel) ->
     try
         doc.body.appendChild node if doc
         switch sel[0]
-            when '.' then node.getElementsByClassName sel.substring(1)
-            when '#' then node.getElementById sel.substring(1)
+            when '.' then node.getElementsByClassName sel[1..]
+            when '#' then node.getElementById sel[1..]
             else node.getElementsByTagName sel
     finally
         doc.body.removeChild node if doc
