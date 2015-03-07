@@ -23,8 +23,8 @@
 
 
 
-</code></pre></div><div class="col col-6 mobile-full"><p>Declare a controller function</p><pre><code class="language-javascript">handler("selectarticle", function(articleid) {
-    // render views
+</code></pre></div><div class="col col-6 mobile-full"><p>Declare a controller function</p><pre><code class="language-javascript">handler("update:articles", function(articleid) {
+    // rerender views
     views.articleCount(model.articles);
     views.articleView(model.articles);
 });</code></pre><p>Trigger an update (as part of an update)</p><pre><code class="language-javascript">model.articles = {

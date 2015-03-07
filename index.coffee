@@ -179,8 +179,8 @@ html5 ->
                     div class:'col col-6 mobile-full', ->
                         p 'Declare a controller function'
                         pre -> code class:'language-javascript', ->
-                          'handler("selectarticle", function(articleid) {\n' +
-                          '    // render views\n' +
+                          'handler("update:articles", function(articleid) {\n' +
+                          '    // rerender views\n' +
                           '    views.articleCount(model.articles);\n' +
                           '    views.articleView(model.articles);\n' +
                           '});'
