@@ -85,7 +85,10 @@ layout = (f) ->
             # region function
             render[name] = rg = (vw) ->
                 return _lazy.set lid+":"+name, (->rg vw) if _lazy
-                detach prev if (prev = regions[name])?.el?.parentNode?
+                # same view in region? no action.
+                return if (prev = regions[name]) == vw
+                # view is attached to dom? detach.
+                detach prev if prev?.el?.parentNode?
                 # set new view
                 if vw
                     # detach view from current region

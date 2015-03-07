@@ -77,6 +77,13 @@ describe 'layout', ->
             eql srlz(l1.el), '<div><div data-region="reg"></div></div>'
             eql srlz(l2.el), '<div><div data-region="reg"><div class="v1"></div></div></div>'
 
+        it 'doesnt do anything if same view is put in region', ->
+            spy (e = l.el.childNodes[0]), 'appendChild'
+            eql e.appendChild.callCount, 0
+            l.top v
+            eql e.appendChild.callCount, 1
+            l.top v
+            eql e.appendChild.callCount, 1
 
 describe '_lazylayout', ->
 
