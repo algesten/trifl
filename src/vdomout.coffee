@@ -69,20 +69,24 @@ prepareProps = (inp) ->
 # hook for dealing with data-* attributes
 VDOMOut.DataHook = class DataHook
     constructor: (@value) ->
-    hook: (node, name) ->
+    hook: (node, name, prevHook) ->
+        return if prevHook?.value == @value
         node.setAttribute name, @value
         node.dataset = {} unless node.dataset # for jsdom
         node.dataset[camelize(name[5..])] = @value
-    unhook: (node, name) ->
+    unhook: (node, name, newHook) ->
+        return if newHook?.value == @value
         node.removeAttribute name
         delete node.dataset[camelize(name[5..])]
 
 # hook for attaching event listeners
 VDOMOut.EventHook = class EventHook
     constructor: (@handler) ->
-    hook: (node, name) ->
+    hook: (node, name, prevHook) ->
+        return if prevHook?.handler == @handler
         event = name[2..]
         node.addEventListener event, @handler
-    unhook: (node, name) ->
+    unhook: (node, name, newHook) ->
+        return if newHook?.handler == @handler
         event = name[2..]
         node.removeEventListener event, @handler

@@ -78,6 +78,12 @@ describe 'VDOMOut', ->
                 eql node.setAttribute.args[0], ['data-white-black-bear', 'panda']
                 eql node.dataset, whiteBlackBear:'panda'
 
+            it 'doesnt hook if previous hook is same data value', ->
+                node = setAttribute: spy()
+                h2 = new VDOMOut.DataHook('panda')
+                h.hook node, 'data-white-black-bear', h2
+                eql node.setAttribute.callCount, 0
+
         describe 'unhook', ->
 
             it 'does removeAttribute and delete node.dataset[camel]', ->
@@ -87,6 +93,15 @@ describe 'VDOMOut', ->
                 h.unhook node, 'data-white-black-bear'
                 eql node.removeAttribute.args[0], ['data-white-black-bear']
                 eql node.dataset, {}
+
+            it 'doesnt unhook if new hook is same data vale', ->
+                node =
+                    removeAttribute: spy()
+                    dataset:whiteBlackBear:'panda'
+                h2 = new VDOMOut.DataHook('panda')
+                h.unhook node, 'data-white-black-bear', h2
+                eql node.removeAttribute.callCount, 0
+
 
     describe 'EventHook', ->
 
@@ -103,9 +118,21 @@ describe 'VDOMOut', ->
                 h.hook node, 'onclick'
                 eql node.addEventListener.args[0], ['click', handler]
 
+            it 'doesnt hook if previous hook is same handler', ->
+                node = addEventListener: spy()
+                h2 = new VDOMOut.EventHook(handler)
+                h.hook node, 'onclick', h2
+                eql node.addEventListener.callCount, 0
+
         describe 'unhook', ->
 
             it 'does removeEventListener with the event name', ->
                 node = removeEventListener: spy()
                 h.unhook node, 'onclick'
                 eql node.removeEventListener.args[0], ['click', handler]
+
+            it 'doesnt unhook if new hook is same handler', ->
+                node = removeEventListener: spy()
+                h2 = new VDOMOut.EventHook(handler)
+                h.unhook node, 'onclick', h2
+                eql node.removeEventListener.callCount, 0
