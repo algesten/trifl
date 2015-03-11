@@ -44,13 +44,12 @@ class Router
         return true
 
     _check: =>
-        winloc = @win.location
-        return false if @loc.pathname == winloc.pathname and @loc.search == winloc.search
-        @_run winloc.pathname, winloc.search
+        {pathname, search} = @win.location
+        return false if @loc.pathname == pathname and @loc.search == search
+        @_run pathname, search
 
     _run: (pathname = '/', search = '') ->
-        @loc.pathname = pathname
-        @loc.search   = search
+        @_setLoc pathname, search
         q = query if search[0] == '?' then search[1..] else search
         try
             @_lazynavigate true
@@ -60,21 +59,29 @@ class Router
             @_lazynavigate false
             _lazylayout false
 
-    navigate: (url) =>
+    _setLoc: (pathname = '/', search = '') ->
+        @loc.pathname = pathname
+        @loc.search   = search
+
+    navigate: (url, trigger = true) =>
         if @_lazynav
-            @_lazynav = url if url
+            @_lazynav = [url, trigger] if url
         else
             @win.history.pushState {}, '', url
-            @_check()
+            if trigger
+                @_check()
+            else
+                {pathname, search} = @win.location
+                @_setLoc pathname, search
         return undefined
 
     _lazynavigate: (suspend) =>
         if suspend
             @_lazynav = '__NOT'
         else
-            url = @_lazynav
+            args = @_lazynav
             delete @_lazynav
-            @navigate url unless url == '__NOT'
+            @navigate args... unless args == '__NOT'
 
     route: (f)    =>
         @_route = f

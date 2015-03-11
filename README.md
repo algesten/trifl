@@ -508,20 +508,26 @@ See [route usage](#route-usage) and [route example](#route-example).
 
 #### navigate
 
-`navigate(l)`
+`navigate(l)`  
+`navigate(l, false)`
 
 Navigates to the location `l` using [pushState][push] and checks to
 see if the url changed in which case the [route function](#route) is
 executed.
 
+The function takes an optional second boolean argument that can be
+used to supress the execution of the route function.
+
 This function is lazy when used inside [route](#route), only the last
 location will be used when the route function finishes.
 
-`:: string -> undefined`
+`:: string -> undefined`  
+`:: string, boolean -> undefined`
 
 arg | desc
 :---|:----
 l   | The (string) location to navigate to. Can be relative.
+t   | Optional boolean set to false to supress route function triggering.
 ret | always `undefined`
 
 ##### navigate example
@@ -531,6 +537,10 @@ ret | always `undefined`
 
 navigate 'other'    # changes url to "http://my.host/some/other"
 navigate '/news'    # changes url to "http://my.host/news"
+
+
+navigate '/didnt', false  # changes url to "http://my.host/didnt"
+                          # without running the route function
 ```
 
 Acknowledgements

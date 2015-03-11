@@ -116,6 +116,7 @@ describe 'route', ->
 
         beforeEach ->
             spy router, '_check'
+            spy router, '_setLoc'
 
         it 'window.history.pushState it', ->
             navigate '/a/path?foo=bar'
@@ -126,11 +127,19 @@ describe 'route', ->
             navigate '/a/path?foo=bar'
             eql router._check.callCount, 1
 
+        it 'doesnt _check if supressed', ->
+            navigate '/b/path?foo=bar', false
+            eql router._check.callCount, 0
+            eql router._setLoc.callCount, 1
+
         it 'returns undefined', ->
             r = navigate '/a',
             eql r, undefined
 
     describe '_lazynavigate', ->
+
+        beforeEach ->
+            spy router, '_check'
 
         describe 'suspends navigation and', ->
 
@@ -155,6 +164,16 @@ describe 'route', ->
                 _lazynavigate false
                 eql window.history.pushState.callCount, 1
                 eql window.history.pushState.args[0], [{}, '', '/bar']
+
+            it 'also works for navigate(url, false)', ->
+                _lazynavigate true
+                navigate '/foo'
+                navigate '/bar', false
+                eql window.history.pushState.callCount, 0
+                _lazynavigate false
+                eql window.history.pushState.callCount, 1
+                eql window.history.pushState.args[0], [{}, '', '/bar']
+                eql router._check.callCount, 0
 
             it 'ignores empty navigate', ->
                 _lazynavigate true
