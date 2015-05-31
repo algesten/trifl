@@ -508,7 +508,7 @@ See [route usage](#route-usage) and [route example](#route-example).
 
 #### navigate
 
-`navigate(l)`  
+`navigate(l)`
 `navigate(l, false)`
 
 Navigates to the location `l` using [pushState][push] and checks to
@@ -521,7 +521,7 @@ used to supress the execution of the route function.
 This function is lazy when used inside [route](#route), only the last
 location will be used when the route function finishes.
 
-`:: string -> undefined`  
+`:: string -> undefined`
 `:: string, boolean -> undefined`
 
 arg | desc
