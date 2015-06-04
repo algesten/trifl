@@ -36,7 +36,7 @@
     "uglify-js": "^2.4.16"
   },
   "dependencies": {
-    "tagg": "1.0.0",
+    "tagg": "1.0.1",
     "virtual-dom": "^2.0.1"
   }
 }
