@@ -56,7 +56,9 @@ prepareProps = (inp) ->
     for k, v of inp
         if k.length > 5 and k[0...5] == 'data-'
             props[k] = new DataHook(v)
-        else k.length > 2 and if k[0...2] == 'on'
+        else if k == 'observe'
+            props[k] = new MutationHook(v)
+        else if k.length > 2 and k[0...2] == 'on'
             props[k] = new EventHook(v)
         else
             (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
@@ -90,3 +92,25 @@ VDOMOut.EventHook = class EventHook
         return if newHook?.handler == @handler
         event = name[2..]
         node.removeEventListener event, @handler
+
+MUTATION_OPTS = {
+    childList:true,
+    attributes:true,
+    attributeOldValue:true,
+    subtree:true
+}
+
+# hook for MutationObserver
+VDOMOut.MutationHook = class MutationHook
+    constructor: (@arg) ->
+        @callback = @options = null
+        {@callback, @options} = @arg if typeof @arg == 'object'
+        @callback = @arg unless @callback
+        @options = MUTATION_OPTS unless @options
+        @observer = new MutationObserver(@callback)
+    hook: (node, name, prevHook) ->
+        return if prevHook?.arg == @arg
+        @observer.observe node, @options
+    unhook: (node, name, newHook) ->
+        return if newHook?.arg == @arg
+        @observer.disconnect()

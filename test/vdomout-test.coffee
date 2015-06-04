@@ -136,3 +136,79 @@ describe 'VDOMOut', ->
                 h2 = new VDOMOut.EventHook(handler)
                 h.unhook node, 'onclick', h2
                 eql node.removeEventListener.callCount, 0
+
+
+
+    describe 'MutationHook', ->
+
+        h = null
+        handler = ->
+        opts =
+            callback: handler
+            options: {myopts:true}
+        node = {node:true}
+
+        beforeEach ->
+            unless global.MutationObserver
+                global.MutationObserver = class MutationObserver
+                    observe: ->
+                    disconnect: ->
+
+        describe 'with func arg', ->
+
+            beforeEach ->
+                h = new VDOMOut.MutationHook(handler)
+                h.observer.observe    = spy ->
+                h.observer.disconnect = spy ->
+
+            describe 'hook', ->
+
+                it 'does @observer.observe on the node', ->
+                    h.hook node, 'observe'
+                    eql h.observer.observe.args[0], [{node:true},{
+                        attributes:true,attributeOldValue:true,childList:true,subtree:true}]
+
+                it 'doesnt hook if previous hook is same @arg', ->
+                    h2 = new VDOMOut.MutationHook(handler)
+                    h.hook node, 'observe', h2
+                    eql h.observer.observe.callCount, 0
+
+            describe 'unhook', ->
+
+                it 'does disconnect', ->
+                    h.unhook node, 'observe'
+                    eql h.observer.disconnect.callCount, 1
+
+                it 'doesnt unhook if new hook is same @arg', ->
+                    h2 = new VDOMOut.MutationHook(handler)
+                    h.unhook node, 'observe', h2
+                    eql h.observer.disconnect.callCount, 0
+
+        describe 'with opts arg', ->
+
+            beforeEach ->
+                h = new VDOMOut.MutationHook(opts)
+                h.observer.observe    = spy ->
+                h.observer.disconnect = spy ->
+
+            describe 'hook', ->
+
+                it 'does @observer.observe on the node', ->
+                    h.hook node, 'observe'
+                    eql h.observer.observe.args[0], [{node:true},{myopts:true}]
+
+                it 'doesnt hook if previous hook is same @arg', ->
+                    h2 = new VDOMOut.MutationHook(opts)
+                    h.hook node, 'observe', h2
+                    eql h.observer.observe.callCount, 0
+
+            describe 'unhook', ->
+
+                it 'does disconnect', ->
+                    h.unhook node, 'observe'
+                    eql h.observer.disconnect.callCount, 1
+
+                it 'doesnt unhook if new hook is same @arg', ->
+                    h2 = new VDOMOut.MutationHook(opts)
+                    h.unhook node, 'observe', h2
+                    eql h.observer.disconnect.callCount, 0

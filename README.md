@@ -12,6 +12,11 @@ There are a bunch of user interface libraries breaking new ground into
 virtual dom and unidirectional data flow, however they mostly follow a
 non-functional programming style. Trifl tries to put functions first.
 
+Check out the tutorial
+----------------------
+
+Check out [the tutorial][pages].
+
 Installation
 ------------
 
@@ -90,11 +95,6 @@ trifl.tagg.expose(window, 'div', 'p');
 ```bash`
 npm install -S trifl
 ```
-
-Check out the tutorial
-----------------------
-
-Check out [the tutorial][pages].
 
 Overview
 --------
@@ -284,6 +284,41 @@ arg | desc
 :---|:----
 as  | Variadic arguments that will be passed to the inner function `f`.
 ret | The dom element rendered.
+
+##### event handlers
+
+Any attribute prefixed `on` will be treated as an event handler and added
+to handle events using `node.addEventListener`. I.e. if you want to listen
+to `click` or `MyEvent` you would do
+
+```coffee
+div onclick: (ev) ->
+    # this function is added using node.addEventListener 'click', fn
+div onMyEvent: (ev) ->
+    # this function is added using node.addEventListener 'MyEvent', fn
+```
+
+##### mutation observers
+
+A DOM `MutationObserver` is added using the attribute `observe`
+
+The attribute has two forms
+
+1. With a straight handler function `observe:(mutations) ->`. This
+will use defaults observation options: `{childList:true,
+attributes:true, attributeOldValue:true, subtree:true}`
+
+2. With an object `observe:{callback:handler, options:{...}}` where
+the object has `callback` function for the mutations and `options` to
+specify which observe options to use.
+
+```coffee
+div observe:{
+    options:{characterData:true}
+    callback: (mutations) ->
+        # deal with mutations
+    }
+```
 
 ##### view example
 
