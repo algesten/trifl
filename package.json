@@ -27,9 +27,9 @@
   "homepage": "https://github.com/algesten/trifl",
   "devDependencies": {
     "browserify": "*",
-    "chai": "^1.10.0",
+    "chai": "^3.3.0",
     "coffee-script": "^1.9.0",
-    "jsdom": "^3.1.1",
+    "jsdom": "^6.5.1",
     "mocha": "^2.1.0",
     "sinon": "^1.12.2",
     "sinon-chai": "^2.6.0",
