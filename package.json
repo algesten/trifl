@@ -28,7 +28,7 @@
   "devDependencies": {
     "browserify": "*",
     "chai": "^3.3.0",
-    "coffee-script": "^1.9.0",
+    "coffee-script": "1.10.0",
     "jsdom": "^6.5.1",
     "mocha": "^2.1.0",
     "sinon": "^1.12.2",
@@ -36,7 +36,7 @@
     "uglify-js": "^2.4.16"
   },
   "dependencies": {
-    "tagg": "1.0.1",
-    "virtual-dom": "^2.0.1"
+    "tagg": "1.0.2",
+    "virtual-dom": "2.1.1"
   }
 }
