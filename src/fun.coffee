@@ -26,13 +26,17 @@ class OrderedMap
     get: (k) -> @map[k]
 
 
-expose = (exp, guard) -> (obj, funs...) ->
-    if funs?.length
-        obj[k] = exp[k] for k in funs
-    else unless obj[guard]
-        obj[k] = v for k, v of exp when k.indexOf("_") != 0
-        obj[guard] = true
-    exp
+expose = do ->
+    (exp, guard) -> (obj, as...) ->
+        return if obj[guard]
+        ofexp = partial get, exp
+        valid = (as) -> map as, (a) -> if ofexp(a) then a else throw "Not found: #{a}"
+        ks = if as.length then valid(as) else keys(exp)
+        fns = map(ofexp) ks
+        props = zipobj ks, map(asprop) fns
+        Object.defineProperties obj, props
+        Object.defineProperty obj, guard, asprop(I)
+        exp
 
 
 module.exports = {startswith, indexof, select, concat, mixin, OrderedMap, expose}
