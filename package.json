@@ -27,16 +27,16 @@
   "homepage": "https://github.com/algesten/trifl",
   "devDependencies": {
     "browserify": "*",
-    "chai": "^3.3.0",
+    "chai": "^3.4.0",
     "coffee-script": "1.10.0",
-    "jsdom": "^6.5.1",
+    "jsdom": "^7.0.2",
     "mocha": "^2.1.0",
-    "sinon": "^1.12.2",
+    "sinon": "^1.17.2",
     "sinon-chai": "^2.6.0",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.5.0"
   },
   "dependencies": {
-    "tagg": "1.0.2",
+    "tagg": "1.0.3",
     "virtual-dom": "2.1.1"
   }
 }
