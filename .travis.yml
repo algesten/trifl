@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - "stable"
+  - "4"
+  - "5"
 before_script:
   coffee -m -o lib -c src
 notifications:
