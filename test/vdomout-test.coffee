@@ -212,3 +212,23 @@ describe 'VDOMOut', ->
                     h2 = new VDOMOut.MutationHook(opts)
                     h.unhook node, 'observe', h2
                     eql h.observer.disconnect.callCount, 0
+
+    describe 'ValueHook', ->
+
+        it 'mutates both attribute and prop for value', ->
+            h = new VDOMOut.ValueHook('value', 'panda')
+            node =
+                setAttribute:spy ->
+                value:null
+            h.hook node
+            eql node.setAttribute.args[0], ['value', 'panda']
+            eql node.value, 'panda'
+
+        it 'mutates both attribute and prop for checked', ->
+            h = new VDOMOut.ValueHook('checked', true)
+            node =
+                setAttribute:spy ->
+                checked:null
+            h.hook node
+            eql node.setAttribute.args[0], ['checked', true]
+            eql node.checked, true

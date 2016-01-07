@@ -60,6 +60,8 @@ prepareProps = (inp) ->
             props[k] = new MutationHook(v)
         else if k.length > 2 and k[0...2] == 'on'
             props[k] = new EventHook(v)
+        else if k == 'value' or k == 'checked'
+            props[k] = new ValueHook(k, v)
         else
             (if NOT_ATTRIBUTES[k] then props else attrs)[k] = v
     if inp.class
@@ -114,3 +116,14 @@ VDOMOut.MutationHook = class MutationHook
     unhook: (node, name, newHook) ->
         return if newHook?.arg == @arg
         @observer.disconnect()
+
+# hook to manipulate prop/attr "value" at the same time
+VDOMOut.ValueHook = class ValueHook
+    constructor: (@name, @value) ->
+    hook: (node, name, prevHook) ->
+        # set the name/attribute on the element
+        node.setAttribute @name, @value
+        # and as form value
+        node[@name] = @value
+    unhook: (node, name, newHook) ->
+        return
