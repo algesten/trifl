@@ -232,3 +232,17 @@ describe 'VDOMOut', ->
             h.hook node
             eql node.setAttribute.args[0], ['checked', true]
             eql node.checked, true
+
+    describe 'TextAreaHook', ->
+
+        it 'propagates textarea content to value', (done) ->
+            h = new VDOMOut.TextAreaHook()
+            node =
+                value: ''
+                textContent: 'panda'
+            h.hook node
+            eql node.value, ''
+            setTimeout ->
+                eql node.value, 'panda'
+                done()
+            , 2

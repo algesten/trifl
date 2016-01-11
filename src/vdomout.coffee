@@ -14,7 +14,7 @@ module.exports = class VDOMOut
     start: ->
 
     begin: (name, vod, inProps) ->
-        props = prepareProps inProps
+        props = prepareProps inProps, name
         if vod
             throw new Error "Bad void element root: #{name}" unless @stack.length > 1
             @cur.childs.push {name, props}
@@ -49,7 +49,7 @@ NOT_ATTRIBUTES =
     namespace: true
     style: true
 
-prepareProps = (inp) ->
+prepareProps = (inp, name) ->
     props = {}
     # virtual-dom needs all other attributes in a special map.
     attrs = props.attributes = {}
@@ -68,6 +68,9 @@ prepareProps = (inp) ->
         # we have class
         props.className = inp.class
         delete props.class
+    if name == 'textarea'
+        # we have a textarea element
+        props.textarea = new TextAreaHook()
     props
 
 # hook for dealing with data-* attributes
@@ -127,3 +130,14 @@ VDOMOut.ValueHook = class ValueHook
         node[@name] = @value
     unhook: (node, name, newHook) ->
         return
+
+# hook to propagate textarea enclosed content to value prop
+VDOMOut.TextAreaHook = class TextAreaHook
+    hook: (node, name, prevHook) ->
+        # a timeout since the hook comes before the enclosed content
+        # has been updated
+        setTimeout ->
+            cont = node.textContent
+            node.value = cont if node.value != cont
+        , 0
+    unhook: ->
