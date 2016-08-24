@@ -1,7 +1,18 @@
 [DEFUNCT] trifl
 =====
 
-Not maintained
+This project is not maintained.
+
+Currently I build stuff using:
+
+* react
+* [react-elem](https://github.com/algesten/react-elem)
+* [refnux](https://github.com/algesten/refnux)
+* [broute](https://github.com/algesten/broute)
+
+This combination is roughly what trifl tried to achieve.
+
+------
 
 [![Build Status](https://travis-ci.org/algesten/trifl.svg)](https://travis-ci.org/algesten/trifl) 
 
