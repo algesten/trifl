@@ -1,7 +1,9 @@
-trifl
+[DEFUNCT] trifl
 =====
 
-[![Build Status](https://travis-ci.org/algesten/trifl.svg)](https://travis-ci.org/algesten/trifl) [![Gitter](https://d378bf3rn661mp.cloudfront.net/gitter.svg)](https://gitter.im/algesten/trifl)
+Not maintained
+
+[![Build Status](https://travis-ci.org/algesten/trifl.svg)](https://travis-ci.org/algesten/trifl) 
 
 > trifling functional views
 
