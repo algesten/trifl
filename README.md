@@ -105,7 +105,7 @@ trifl.tagg.expose(window, 'div', 'p');
 
 ### Installing with NPM
 
-```bash`
+```bash
 npm install -S trifl
 ```
 
